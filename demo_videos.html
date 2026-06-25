@@ -1,0 +1,3354 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8"><title>视频深度分析 Demo v2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:"Microsoft YaHei","PingFang SC","HarmonyOS Sans SC","Source Han Sans CN","Noto Sans CJK SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif !important;}
+html,body{font-family:"Microsoft YaHei","PingFang SC","HarmonyOS Sans SC","Source Han Sans CN","Noto Sans CJK SC",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+body{background:#f0f2f5;padding:12px;font-size:12px;color:#222;}
+h1{font-size:18px;margin-bottom:4px}
+.subtitle{color:#666;font-size:12px;margin-bottom:12px}
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(560px,1fr));gap:12px}
+.card{background:#fff;border-radius:6px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06);display:flex;flex-direction:column}
+.rank-band{background:linear-gradient(90deg,#FF4D4F 0%,#FF7A45 100%);color:#fff;padding:5px 10px;font-weight:600;font-size:11px}
+.body{display:grid;grid-template-columns:200px 1fr;gap:8px;padding:8px}
+.left .play-wrap{position:relative;display:block;background:#1a1a1a;border-radius:4px;overflow:hidden}
+.left img{width:100%;display:block}
+.play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.7);color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid rgba(255,255,255,.6);}
+.play-wrap:hover .play-btn{background:#FF4D4F;border-color:#FF4D4F}
+.right{display:flex;flex-direction:column;gap:5px;min-width:0}
+.title{font-size:13px;font-weight:600;line-height:1.35;color:#222;margin-bottom:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row-info{display:flex;gap:6px;align-items:center;padding:4px 6px;background:#fafafa;border-radius:3px}
+.thumb{width:32px;height:32px;object-fit:cover;border-radius:3px;flex-shrink:0}
+.thumb-round{border-radius:50%}
+.info-text{flex:1;min-width:0;line-height:1.35;font-size:11px;overflow:hidden}
+.info-text > div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info-text .sub{color:#888;font-size:10px;margin-top:1px}
+.badge{background:#1890ff;color:#fff;font-size:10px;padding:0 4px;border-radius:2px;margin-left:3px;font-weight:normal}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;margin-top:auto}
+.kpis>div{display:flex;flex-direction:column;align-items:center;background:#f5f7fa;padding:3px;border-radius:3px}
+.kpis span{font-size:10px;color:#999;line-height:1.2}
+.kpis b{font-size:11px;color:#222;margin-top:1px;line-height:1.2}
+.script{background:#fffbe6;border-top:1px solid #ffe58f;padding:8px 10px}
+.script-title{font-weight:600;color:#d46b08;margin-bottom:5px;font-size:12px}
+.script-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:6px}
+.script-block{background:#fff;padding:5px 6px;border-radius:3px;border:1px solid #ffe58f;min-width:0}
+.block-label{font-size:10px;color:#999;margin-bottom:2px}
+.block-tag{display:inline-block;background:#fff1b8;color:#ad6800;padding:0 5px;border-radius:2px;font-size:10px;font-weight:600;margin-bottom:2px}
+.block-text{font-size:11px;color:#444;line-height:1.4;font-style:italic;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.script-meta{font-size:11px;line-height:1.6;color:#444}
+.script-meta>div{margin-bottom:1px}
+.chip{display:inline-block;padding:0 6px;border-radius:8px;font-size:10px;margin-right:3px;margin-top:1px;line-height:1.6}
+.chip-材质{background:#e6f7ff;color:#0958d9}
+.chip-品牌{background:#f9f0ff;color:#722ed1}
+.chip-工艺{background:#fff7e6;color:#ad6800}
+.chip-保障{background:#f6ffed;color:#389e0d}
+.chip-价格{background:#fff1f0;color:#cf1322}
+.chip-情感{background:#fff0f6;color:#c41d7f}
+.chip-none{color:#aaa;font-size:11px}
+.tactic{display:inline-block;background:#1890ff;color:#fff;padding:0 7px;border-radius:8px;font-size:10px;margin-right:3px;line-height:1.6}
+.tactic-none{color:#aaa;font-size:11px}
+</style></head><body>
+<h1>🎬 视频深度分析 Demo v2（Top 50）</h1>
+<p class="subtitle">数据：飞瓜接口 + 抖音原视频下载 + Whisper 文案转写 + 帧像素分析 · 点击拼图打开抖音原视频</p>
+<div class="cards-grid">
+<div class="card">
+  <div class="rank-band">#1 · GMV 5w-10w · 互动 2.2w · 时长 189s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653866571034561842" target="_blank" class="play-wrap">
+        <img src="video_frames/001_7653866571034561842_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">不挑衣服不挑人！黄皮戴也巨显白的四叶草手链，给你的对象买一条这样的手链，让她立马气质飙升！</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_a9cf6e88a42e072cde8a936c38af63b9_sx_4268055_www2048-2048" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>手链 金色爱心四叶草花双面立体镂空时尚百搭手链高级女款手链</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;手链 · ¥13</div>
+          <div class="sub">小店: 沐拾饰品 · 品牌: 潮金周</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/5d380258b7de2cb373dd9c18601069e5.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>沐拾饰品</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 3876 · 抖音号 90450849442</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>5000-1w</b></div>
+        <div><span>点赞</span><b>1.7w</b></div>
+        <div><span>评论</span><b>1050</b></div>
+        <div><span>分享</span><b>1778</b></div>
+        <div><span>互动率</span><b>0.8%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-28s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"今日一女子带著两个女儿出门游玩 被一辆叫车碰倒 此时的司机因过于紧张出现失误而导致出现意外 两人在车..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"而开车的人是朝京州珠宝集团的总裁周海富女儿 周老板亲自对受伤的人表示道歉负责了全部费用 并急于了100万作为补偿 周老板..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"我也是抱著事实的心态就买了 没想到是真的 戴上大气又好看 我立马又去买了几单 打算以后我儿子取媳妇的..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#2 · GMV 5w-10w · 互动 953 · 时长 38s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653170306240089387" target="_blank" class="play-wrap">
+        <img src="video_frames/002_7653170306240089387_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_0b9b5dc224c453996a1e55f165ebaf02_sx_38236_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>铜合金合金耳饰 法式气质轻奢百搭泡泡耳环耳钉小众首饰高级耳饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳钉 · ¥69.76</div>
+          <div class="sub">小店: 锦颜美妆小铺 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/96450124460c735f8f2041170c154946.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>锦颜美妆小铺</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4 · 抖音号 90013040279</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>591</b></div>
+        <div><span>评论</span><b>12</b></div>
+        <div><span>分享</span><b>90</b></div>
+        <div><span>互动率</span><b>0.27%</b></div>
+        <div><span>GPM</span><b>250-500</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-5s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"我再给你看一下 今天一个小小的耳机 我让你记住我来 卡班 听到了没有 你不要看它是个小耳顶..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"但它带上去特别修摄联系 而且关键是看我的背面 背面都好感 你搭小单单 看得没有 你不用用颜值 你就随便搭个帮求帽 你搭休..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"当然它也不适合夏天 但如果你容易晒黑的话 我跟你讲真的不要看心 你就去买相命记色 你就去买相命记色..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#3 · GMV 2w-10w · 互动 1.8w · 时长 34s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653503999760561531" target="_blank" class="play-wrap">
+        <img src="video_frames/003_7653503999760561531_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">还有谁没种草！这个价格一桶那么多，好看又耐用#APM #发绳 #发饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/png_m_c6f55d7f7686963e138a6ff60eb568b5_sx_522381_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>APM/时尚发圈高弹力皮筋发圈明星同款高级感发饰扎头发头绳百搭</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥35.68</div>
+          <div class="sub">小店: APM官方旗舰店 · 品牌: APM</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/212d9a6112ee48545cc5c418da51eb88.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>一颗糖小白</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 3.4w · 抖音号 81298946</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-5000</b></div>
+        <div><span>点赞</span><b>9280</b></div>
+        <div><span>评论</span><b>115</b></div>
+        <div><span>分享</span><b>6166</b></div>
+        <div><span>互动率</span><b>0.72%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-5s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"看世界被居然被重草了头上 它暴凝去90分钟 头发狂甩不掉了统款头上 我给大家找到了..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"APM这个发圈之前可多要100多一盒的 现在放了一个大额一回圈 你们看看到时候才多少钱 它果然是贵有贵的道理 每一根都是..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"而且很时猫很摆的 APM现下店真不便宜 现在还有额外给你送一盒 他家小皮精 刷到很值得多选几个颜色..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#4 · GMV 5w-10w · 互动 1.1w · 时长 84s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653760875630693673" target="_blank" class="play-wrap">
+        <img src="video_frames/004_7653760875630693673_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">9.9一个轻奢高级感大肠发圈</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_0945564ec074d903018c9b2231a982a8_sx_255112_www1206-1206" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>偶玉夏日大肠发圈女高级感轻奢气质扎马尾丸子头花皮筋发绳发饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥10.17</div>
+          <div class="sub">小店:  · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/c341ca6789b5f2ed97bca2e6883927e3.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>流光星阁</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 2682 · 抖音号 96372231354</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>5000-1w</b></div>
+        <div><span>点赞</span><b>4733</b></div>
+        <div><span>评论</span><b>55</b></div>
+        <div><span>分享</span><b>824</b></div>
+        <div><span>互动率</span><b>0.66%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">社交场景开场</div>
+        <div class="block-text">"9.9一个轻奢高级感大肠发圈 9.9一个轻奢高级感大肠发圈 ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"9.9一个轻奢高级感大肠发圈 9.9一个轻奢高级感大肠发圈 - 流光星阁于20260621发布在抖音，已经收获了5.6万..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"个喜欢，来抖音，记录美好生活！ 9.9一个轻奢高级感大肠发圈..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#5 · GMV 5w-10w · 互动 3868 · 时长 84s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654249717412564270" target="_blank" class="play-wrap">
+        <img src="video_frames/005_7654249717412564270_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">夏日大肠发圈女高级感轻奢气质扎马尾丸子头花皮筋发绳发饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_df0b8c86e6b4d5b5c79a8d1b874df85b_sx_65266_www790-790" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>夏日大肠发圈女高级感轻奢气质扎马尾丸子头花皮筋发绳发饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥17.56</div>
+          <div class="sub">小店: ShineEra饰品 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/c4383d9af2df9e11d07262bfc5a5209c.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>ShineEra饰品</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 1021 · 抖音号 39024658576</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>2500-5000</b></div>
+        <div><span>点赞</span><b>1813</b></div>
+        <div><span>评论</span><b>38</b></div>
+        <div><span>分享</span><b>454</b></div>
+        <div><span>互动率</span><b>0.45%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">社交场景开场</div>
+        <div class="block-text">"夏日大肠发圈女高级感轻奢气质扎马尾丸子头花皮筋发绳发饰 夏日大肠发圈女高级感轻奢气质扎马尾..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"夏日大肠发圈女高级感轻奢气质扎马尾丸子头花皮筋发绳发饰 夏日大肠发圈女高级感轻奢气质扎马尾丸子头花皮筋发绳发饰 - Sh..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"6万个喜欢，来抖音，记录美好生活！ 夏日大肠发圈女高级感轻奢气质扎马尾丸子头花皮筋发绳发饰..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#6 · GMV 5w-10w · 互动 6706 · 时长 36s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653767316974374207" target="_blank" class="play-wrap">
+        <img src="video_frames/006_7653767316974374207_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">放心买放心戴，都是自己戴了一段时间才分享 #手链 #用了甜妹滤镜就是甜妹</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_76d36a472b3657ddc635d837183a2544_sx_918861_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金手链 手链时尚精美气质饰品金色百搭水波纹女款</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;手链 · ¥39</div>
+          <div class="sub">小店: 汇格饰品 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/9aa0d9380944022071b4776a2764d33d.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>汇格饰品</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 13 · 抖音号 72023488599</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>5409</b></div>
+        <div><span>评论</span><b>216</b></div>
+        <div><span>分享</span><b>215</b></div>
+        <div><span>互动率</span><b>1.79%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-5s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"这个蓝色是很梦幻的颜色 而且它超级超级的显白 超级好看 发亮少 发亮多都能带..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"而且上头周的话 这个的话它是可以让你头发和发圈合而为一的 这个蓝色是你穿浅 色系衣服 穿深色 心服也可以的 这个蓝色发圈..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"五个蝴蝴地姐 这个发圈我们所有人都进一搭 满我们的蓝 蓝色超级好看..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#7 · GMV 5w-10w · 互动 3480 · 时长 195s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653190940772814116" target="_blank" class="play-wrap">
+        <img src="video_frames/007_7653190940772814116_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_0b9b5dc224c453996a1e55f165ebaf02_sx_38236_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>铜合金合金耳饰 法式气质轻奢百搭泡泡耳环耳钉小众首饰高级耳饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳钉 · ¥69.76</div>
+          <div class="sub">小店: 锦颜美妆小铺 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/96450124460c735f8f2041170c154946.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>锦颜美妆小铺</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4 · 抖音号 90013040279</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>2148</b></div>
+        <div><span>评论</span><b>29</b></div>
+        <div><span>分享</span><b>238</b></div>
+        <div><span>互动率</span><b>0.55%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰 法式气质轻奢百搭泡泡耳环耳钉小..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰 法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰 - 锦颜美妆小铺于202..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"个喜欢，来抖音，记录美好生活！ 法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#8 · GMV 2.5w-5w · 互动 4122 · 时长 40s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654379031520939291" target="_blank" class="play-wrap">
+        <img src="video_frames/008_7654379031520939291_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">龙凤褂，新中式礼服红色旗袍，红色婚纱怎么搭配都好看金色凤冠 东方独有的红金浪漫，都藏在这套中式造型里 鎏金凤冠搭配垂坠长耳饰，低盘中分弱化厚重感 化妆师极简淡妆</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_6c001102e45691aa6ea512631d226ac8_sx_215949_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>婚庆饰品 新娘头饰品复古宫廷高级婚礼旗袍干净龙凤褂配饰MT0355</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;婚庆饰品&gt;婚庆饰品 · ¥138</div>
+          <div class="sub">小店: 梦瑶饰品旗舰店 · 品牌: 梦瑶</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/6603b8bdf81c23adfa68960a4e5ad636.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>梦瑶新娘造型分享</b> <span class="badge">上海梦瑶传媒广告有限公司</span></div>
+          <div class="sub">粉丝 1.5w · 抖音号 87052296616</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>250-500</b></div>
+        <div><span>点赞</span><b>2155</b></div>
+        <div><span>评论</span><b>6</b></div>
+        <div><span>分享</span><b>792</b></div>
+        <div><span>互动率</span><b>2.46%</b></div>
+        <div><span>GPM</span><b>250-500</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"你在看一下背面360度 来 我再给你看一下 今天一个小小的耳机 我让你记住我来 Cover 听到了没..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"你不要看它是个小耳 但它带上去特别修摄联系 而且关键是看我的背面 背面都好感 你大小的乱 看得没有 你不用有颜值 你就随..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"当然它也不适合夏天 但如果你容易晒黑的话 我跟你讲真的不要看心 你就去买小命记者 你就去买小命记者..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#9 · GMV 2.5w-5w · 互动 872 · 时长 13s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7651059570693013681" target="_blank" class="play-wrap">
+        <img src="video_frames/009_7651059570693013681_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">佩戴简单方便，做了美甲也可以轻松佩戴的魔力项链，进口配件，时髦百搭！#项链 #法式 #长项链 #穿搭 #PNJewelry</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_ab6ef797957318ce256110d7e9f153fe_sx_980233_www2000-2000~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>p&amp;n 夏季法式磁吸mini珠光链 百搭时尚优雅叠戴多种戴法项链精致</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;项链&gt;项链 · ¥219</div>
+          <div class="sub">小店: p&amp;n官方旗舰店 · 品牌: P&amp;N</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/287ee411a22d39472319399f1f65d32c.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>p&amp;n官方旗舰店</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 35w · 抖音号 youjishishang</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>0-250</b></div>
+        <div><span>点赞</span><b>497</b></div>
+        <div><span>评论</span><b>4</b></div>
+        <div><span>分享</span><b>51</b></div>
+        <div><span>互动率</span><b>0.57%</b></div>
+        <div><span>GPM</span><b>250-500</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"佩戴简单方便，做了美甲也可以轻松佩戴的魔力项链，进口配件，时髦百搭！#项链 #法式 #长项链 #穿搭..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"佩戴简单方便，做了美甲也可以轻松佩戴的魔力项链，进口配件，时髦百搭！#项链 #法式 #长项链 #穿搭 #PNJewelr..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"万个喜欢，来抖音，记录美好生活！ 佩戴简单方便，做了美甲也可以轻松佩戴的魔力项链，进口配件，时髦百搭..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#10 · GMV 2.5w-5w · 互动 387 · 时长 43s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654220264867188014" target="_blank" class="play-wrap">
+        <img src="video_frames/010_7654220264867188014_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">快去试试！#七粒米#亲测分享</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_283fb00b947f6173eaee0078744d63c5_sx_405082_www2048-2048" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>黄铜珐琅戒指 七粒米七颗米戒指时尚气质高级感百搭精致开口指环</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;戒指/指环 · ¥39.63</div>
+          <div class="sub">小店: 禅心高定首饰 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/107fcda3d722ec3ba57fd6dc1422ff34.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>禅心高定首饰</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4778 · 抖音号 82464025680</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>234</b></div>
+        <div><span>评论</span><b>2</b></div>
+        <div><span>分享</span><b>37</b></div>
+        <div><span>互动率</span><b>0.3%</b></div>
+        <div><span>GPM</span><b>250-500</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"很多年前我在中国也看到过这样的项链 当时就被洗澡 因为它真的太会变了..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"总体差配有80米 搭配了10个金色春花工艺的词系 闪下亮亮 护箱轻轻一泡 就可以变换配带风格 YS型戴法更加简洁干脸 长..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"越需要有这种细节感的手势 演技功效 夏天带珠珠 真的会让人写得特别干净 速谷公公 真的很需要它..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#11 · GMV 2.5w-5w · 互动 772 · 时长 74s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654205022422519046" target="_blank" class="play-wrap">
+        <img src="video_frames/011_7654205022422519046_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">谁能懂啊？#七粒米#戒指</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_283fb00b947f6173eaee0078744d63c5_sx_405082_www2048-2048" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>黄铜珐琅戒指 七粒米七颗米戒指时尚气质高级感百搭精致开口指环</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;戒指/指环 · ¥39.63</div>
+          <div class="sub">小店: 禅心高定首饰 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/107fcda3d722ec3ba57fd6dc1422ff34.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>禅心高定首饰</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4778 · 抖音号 82464025680</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>461</b></div>
+        <div><span>评论</span><b>2</b></div>
+        <div><span>分享</span><b>70</b></div>
+        <div><span>互动率</span><b>0.38%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"谁能懂啊？#七粒米#戒指 谁能懂啊？#七粒米#戒指 - ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"谁能懂啊？#七粒米#戒指 谁能懂啊？#七粒米#戒指 - 禅心高定首饰于20260622发布在抖音，已经收获了5637个喜..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"个喜欢，来抖音，记录美好生活！ 谁能懂啊？#七粒米#戒指..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#12 · GMV 2.5w-5w · 互动 132 · 时长 40s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654270854523604260" target="_blank" class="play-wrap">
+        <img src="video_frames/012_7654270854523604260_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">快去试试！#七粒米#亲测分享</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_283fb00b947f6173eaee0078744d63c5_sx_405082_www2048-2048" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>黄铜珐琅戒指 七粒米七颗米戒指时尚气质高级感百搭精致开口指环</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;戒指/指环 · ¥39.63</div>
+          <div class="sub">小店: 禅心高定首饰 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/107fcda3d722ec3ba57fd6dc1422ff34.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>禅心高定首饰</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4778 · 抖音号 82464025680</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>80</b></div>
+        <div><span>评论</span><b>1</b></div>
+        <div><span>分享</span><b>13</b></div>
+        <div><span>互动率</span><b>0.33%</b></div>
+        <div><span>GPM</span><b>1000-2500</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"今年一定要戴七厘米,不是米性,是千年传承的福气 千万别随便买普通的七厘米..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"正中的七厘米借质必须是红白营 三色剧权对应的是事业感情米 普通的七厘米是装饰 三色剧权的七厘米才是福气慢慢 你看着每一个..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"而且默默戴不言语 建议每个人最少准备亮美 一年一次 今年一定要给自己安排上..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#13 · GMV 2.5w-5w · 互动 3103 · 时长 40s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653346601380973843" target="_blank" class="play-wrap">
+        <img src="video_frames/013_7653346601380973843_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_86431593b3a21082c22e32a9224908ee_sx_35929_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳钉 · ¥64.67</div>
+          <div class="sub">小店: 锦颜美妆小铺 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/96450124460c735f8f2041170c154946.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>锦颜美妆小铺</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4 · 抖音号 90013040279</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>1945</b></div>
+        <div><span>评论</span><b>46</b></div>
+        <div><span>分享</span><b>192</b></div>
+        <div><span>互动率</span><b>0.52%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"你在看一下背面360度 来 我再给你看一下 今天一个小小的耳机 我让你记住我来 卡班 听到了没有..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"你不要看它是个小耳顶 但它带上去特别修摄联系 而且关键是看我的背面 背面都口感 你大小在乱 看得没有 你不用有颜值 你就..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"当然它也更适合夏天 但如果你容易晒黑的话 我跟你讲真的不要看心 你就去买小命记色 你就去买小命记色..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#14 · GMV 2.5w-5w · 互动 2.2w · 时长 40s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7650518935926418618" target="_blank" class="play-wrap">
+        <img src="video_frames/014_7650518935926418618_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">不只是好看 扎头发也特别牢固！#发圈头绳</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/png_m_95e92d815770d70ce75a43c71a19b88a_sx_845590_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>APM水晶发圈时尚个性扎头高弹力发绳潮酷高级百搭甜美马尾发饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥19.63</div>
+          <div class="sub">小店: APM官方旗舰店 · 品牌: APM</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/0fe8879c4182e717f8507805ef2638e6.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>排儿在努力</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 1.6w · 抖音号 27965610565</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>1.3w</b></div>
+        <div><span>评论</span><b>264</b></div>
+        <div><span>分享</span><b>3514</b></div>
+        <div><span>互动率</span><b>0.29%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"你在看一下背面360度 来 我再给你看一下 今天一个小小的耳机 我让你记住我来 Cover 听到了没..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"你不要看它是个小耳 但它带上去特别修摄联系 而且关键是看我的背面 背面都好感 你大小的乱 看得没有 你不用有颜值 你就随..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"当然它也不适合夏天 但如果你容易晒黑的话 我跟你讲真的不要看心 你就去买小命记者 你就去买小命记者..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#15 · GMV 2.5w-5w · 互动 1552 · 时长 45s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7652594688810538354" target="_blank" class="play-wrap">
+        <img src="video_frames/015_7652594688810538354_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">给孩子的皮筋买好看又耐用的他们就很喜欢#女宝发绳扎头发 #儿童日常扎发 #头绳 #高弹力头绳 #高马尾</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_aeb6e99b448c8a7ac79794b4dd9ccb8e_sx_182630_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>丝丝女王/SISIQUEEN明星同款发圈2026简约百搭发绳高弹力运动头绳</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥15.9</div>
+          <div class="sub">小店: 丝丝女王饰品旗舰店 · 品牌: 丝丝女王</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/edd2b3e94ef1193b7fa597fc33e15280.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>林涵涵</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 1.3w · 抖音号 111572002</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>867</b></div>
+        <div><span>评论</span><b>25</b></div>
+        <div><span>分享</span><b>141</b></div>
+        <div><span>互动率</span><b>0.28%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"我现在满发山已经不是为了扎头发了 就是为了带在手上的时候好看 Apps M这个牌子之前逛商场的时候 ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"现在品牌是为了换掉这个丑包装 就把这一批全部拿出来清了 尤其是在灯光下就跟那种 碎钻一样的特别的有质感 我本来以为它是那..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"一定要入这个紫色的 真的好漂亮 它里也是很大的 就它的质感包括使用材料的感受 真的不是我那种几块钱的..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#16 · GMV 2.5w-5w · 互动 3843 · 时长 0s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653534571593469225" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">同样是抓夹差距咋就这么大呢这氛围感马尾我先扎了 #发型教程#抓夹用法 #马尾 #简单好看发型</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_001cd30ef4126a30482e3792daea3778_sx_100663_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>新款异形抓夹女发量少后脑勺鲨鱼夹百搭气质头饰小号发卡</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发夹 · ¥3.99</div>
+          <div class="sub">小店: 曦瑶精选饰品店 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/e70b08db71bba7c0e2042f19396c28f2.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>李李同学～</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 3.7w · 抖音号 52091793824</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>5000-1w</b></div>
+        <div><span>点赞</span><b>3301</b></div>
+        <div><span>评论</span><b>63</b></div>
+        <div><span>分享</span><b>479</b></div>
+        <div><span>互动率</span><b>0.33%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"同样是抓夹差距咋就这么大呢这氛围感马尾我..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"同样是抓夹差距咋就这么大呢这氛围感马尾我先扎了 #发型教程#抓夹用法 #马尾 #简单好看发型..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"型教程#抓夹用法 #马尾 #简单好看发型..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#17 · GMV 2.5w-5w · 互动 3621 · 时长 18s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653830421813661361" target="_blank" class="play-wrap">
+        <img src="video_frames/017_7653830421813661361_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">终于找到好用#不伤发头绳 #新升级加粗加厚高弹力 get青春有型#高马尾#头绳 #发绳发圈</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_85c980415bd2856ae36b511e4d9712a1_sx_1629234_www2409-2409~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>升级加粗木耳边发圈扎高马尾丸子头发绳无接缝时尚简约头绳皮筋</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥9.7</div>
+          <div class="sub">小店: 檬昕电子商务商行 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/e8de807f501bbfee748661af802ec463.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>檬昕发饰</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4.9w · 抖音号 mengxindianz</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>2500-5000</b></div>
+        <div><span>点赞</span><b>2169</b></div>
+        <div><span>评论</span><b>10</b></div>
+        <div><span>分享</span><b>143</b></div>
+        <div><span>互动率</span><b>0.18%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-2s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"自从用了它之后 我真的再也看不上其他法圈了..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"它是这种宽宽速度的无街风发声 弹力大回弹力还好 用它扎出来的麻尾不仅舒适 不泪头皮 就是怎么晃都不会松垮 一整个元气满满..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"真的太适合春夏了..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#18 · GMV 2.5w-5w · 互动 859 · 时长 18s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654221178634564337" target="_blank" class="play-wrap">
+        <img src="video_frames/018_7654221178634564337_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">一念起，风生水起；一念落，岁月无波澜。少年是星辰大海中最耀眼的星，心怀浩渺，方能既往无畏。自爱者风生水起，不自爱者岁月无波澜。愿你被幸运环绕，积极向上，眼里永远</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_70d334ebd7bac80e821ecca8adb8036f_sx_2218294_www1254-1254~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>七粒米戒指古法手工戒指轻奢时尚个性七粒米指环活口</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;戒指/指环 · ¥39.79</div>
+          <div class="sub">小店: 承悦饰品 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/63a7a4f780d066e2435ceee7b644a361.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>程大燕的朋友圈</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 2.4w · 抖音号 chengyan112233</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>523</b></div>
+        <div><span>评论</span><b>55</b></div>
+        <div><span>分享</span><b>107</b></div>
+        <div><span>互动率</span><b>0.54%</b></div>
+        <div><span>GPM</span><b>250-500</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-2s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"自从用了它之后 我真的再也看不上其它霸圈了..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"它是这种宽宽粗粗的无街风霸声 谈历大回谈历还好 用它扎出来的麻尾不仅舒适不泪头皮 就是怎么晃的不会松垮一整个元气满满了 ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"真的太适合春夏了..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#19 · GMV 2.5w-5w · 互动 286 · 时长 64s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653488909053136171" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">不知道能不能说，反正是要和你们说一说.可有讲究了！ # 耳环#首饰分享 #时尚饰品 #精致女人必备</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_5ecff64a77904b19c86699f29ffe9f4a_sx_87147_www1080-1080~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>大师推荐【原创正品】七粒米耳环高级感轻奢素圈耳扣女气质耳饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳环 · ¥89.9</div>
+          <div class="sub">小店: 普陀山福运文创 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/cdb1333e1c9a643899087a76ffa28655.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>普陀山福运文创</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 31 · 抖音号 44668313920</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>250-500</b></div>
+        <div><span>点赞</span><b>197</b></div>
+        <div><span>评论</span><b>1</b></div>
+        <div><span>分享</span><b>10</b></div>
+        <div><span>互动率</span><b>0.53%</b></div>
+        <div><span>GPM</span><b>500-1000</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-9s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"我不允许女孩子所谓不带起立密 你可以喝你的老婆和你的男朋友 就把这个起立密带到你的手指上 它不但是搭..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"安亚有 什么 我有一些自己的小信仰 但是这个起立密 他就类似于是 斯克提醒文仰 我们有时候就耍到视频 于选人上市民要去拜..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"我又刚老公又买了一个 然后我本来觉得 我把自己带起立密 然后当我来到毕竟 就说 还有好多人都带起立密..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#20 · GMV 2.5w-5w · 互动 2495 · 时长 58s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7651227056155479346" target="_blank" class="play-wrap">
+        <img src="video_frames/020_7651227056155479346_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">有点阅历的姐姐们都知道，上了年纪的女人，要戴点寓意比较美好的首饰，尤其是存不住钱的，穗穗平安戒#戒指#首饰分享</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_e214ebde1744e19824b944ca6bf9a23e_sx_218633_www2000-2000" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>银葵【满穗安康】丰收圆满穗穗平安民族风做旧款式开口戒指</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;戒指/指环 · ¥19.52</div>
+          <div class="sub">小店: 银葵高定首饰 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/25a61336d475cddb21b26a82a2d7f74c.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>银葵高定首饰</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 1.3w · 抖音号 68251633867</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>1437</b></div>
+        <div><span>评论</span><b>12</b></div>
+        <div><span>分享</span><b>133</b></div>
+        <div><span>互动率</span><b>0.75%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-8s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"女人小要在两三年之内翻身 做的这7点就够 第一 穿金不如带银 如果你耳朵空空不带耳环的话..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"是有很大影响的 赢数水 含量通透 经常失热或容易上火的 就很适合带银 就像这款契利米耳环你看大米吗 它可是粮食 在古代是..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"保耳垂 耳垂都能放心取代 能带一整年 趁现在价格滑算 这样一没愈意满满 还好看著7厘米耳环 带一队回..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#21 · GMV 2.5w-5w · 互动 84 · 时长 43s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654051692618501419" target="_blank" class="play-wrap">
+        <img src="video_frames/021_7654051692618501419_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_0b9b5dc224c453996a1e55f165ebaf02_sx_38236_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>铜合金合金耳饰 法式气质轻奢百搭泡泡耳环耳钉小众首饰高级耳饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳钉 · ¥69.76</div>
+          <div class="sub">小店: 锦颜美妆小铺 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/96450124460c735f8f2041170c154946.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>锦颜美妆小铺</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4 · 抖音号 90013040279</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>46</b></div>
+        <div><span>评论</span><b>0</b></div>
+        <div><span>分享</span><b>6</b></div>
+        <div><span>互动率</span><b>0.72%</b></div>
+        <div><span>GPM</span><b>2500-5000</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"端午营重下 风吹麦浪香 女人没事可以带一枚麦碎戒指 尤其是上了年纪 经常存不住钱的..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"自从我创业以来 手上一直带的就是这枚麦碎戒指 这还是一个董行的朋友告诉我的 麦子他是粮食嘛 很多大店开业的时候 门口摆的..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"你们要是手上还没有的 称工厂又活动 下单还送李河和福卡贴纸 喜欢的赶紧点进来 带个回去试试..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#22 · GMV 1w-2.5w · 互动 1202 · 时长 40s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653741637473996041" target="_blank" class="play-wrap">
+        <img src="video_frames/022_7653741637473996041_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">小号巨能爪~异形抓夹女2026新款发夹后脑勺发量多大号鲨鱼夹头饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/obj/ecom-shop-material/webp_m_152356b7408766a4fb4fb6ae8b1216f4_sx_77228_www800-800" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>新款异形抓夹女发量少后脑勺鲨鱼夹百搭气质头饰小号发卡</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发夹 · ¥11.65</div>
+          <div class="sub">小店: 仪饰感严选 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/fe761bbe28692fb678d7558c8c82b0c9.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>仪饰感严选</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 2.2w · 抖音号 45136806770</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>671</b></div>
+        <div><span>评论</span><b>4</b></div>
+        <div><span>分享</span><b>66</b></div>
+        <div><span>互动率</span><b>0.41%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"你在看一下背面360度 来 我再给你看一下 今天一个小小的耳机 我让你记住我来 Cover 听到了没..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"你不要看它是个小耳 但它带上去特别修摄联系 而且关键是看我的背面 背面都好感 你大小的乱 看得没有 你不用有颜值 你就随..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"当然它也不适合夏天 但如果你容易晒黑的话 我跟你讲真的不要看心 你就去买小命记者 你就去买小命记者..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#23 · GMV 1w-2.5w · 互动 70 · 时长 90s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653901746997103918" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">女生必备的手链，高级显白，提升气质的单品！ #手链 #首饰分享#饰品#女生必备#熊饱饱</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_254dba5a153d108f583aa60c33af6809_sx_1640675_www2048-2048~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金手链  2439【天河之石间钻五花】好运富贵心想事成亚马逊石手链</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;手链 · ¥579</div>
+          <div class="sub">小店: 贰肆叁玖商贸行 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/8c496197a2c6d365f47af1d5c29624e0.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>熊饱饱🦋（奋斗版）</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 1293 · 抖音号 79939775784</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>0-250</b></div>
+        <div><span>点赞</span><b>43</b></div>
+        <div><span>评论</span><b>3</b></div>
+        <div><span>分享</span><b>13</b></div>
+        <div><span>互动率</span><b>0.36%</b></div>
+        <div><span>GPM</span><b>500-1000</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-13s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"放下来 夹上 然后你给的夹上融下去发动一下 好了 这个是一个盆拳拔扎发去扎好了 很多小夹是扎不了这款..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"融下去很容易就散开了 它是很显很显发亮 很修飘的一个发型 发亮亡洲也随便去扎 头发不是特别少动动去扎的 按留少的时候你看..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"杀狱夹这样入出现 一个是中分一个是冒击而 所以你不敢低头 上下对称 用的时候不分反正 你这样拿和这样..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#24 · GMV 1w-2.5w · 互动 345 · 时长 209s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7651658214915706150" target="_blank" class="play-wrap">
+        <img src="video_frames/024_7651658214915706150_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">经典永不过时的推拉手镯 精致纹理 日常通勤约会都能戴</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_3556493503079d348cec8cddd8b6d93c_sx_92428_www1024-1024" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>【专柜精品】花开富贵可推拉时尚女款手镯送妈妈老婆女友</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;手镯 · ¥299</div>
+          <div class="sub">小店: MANA潮奢 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/1fc4e5384b17048535375f490e531472.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>MANA潮奢</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 60 · 抖音号 68739661445</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>0-250</b></div>
+        <div><span>点赞</span><b>249</b></div>
+        <div><span>评论</span><b>23</b></div>
+        <div><span>分享</span><b>8</b></div>
+        <div><span>互动率</span><b>1.5%</b></div>
+        <div><span>GPM</span><b>500-1000</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"经典永不过时的推拉手镯 精致纹理 日常通勤约会都能戴 经典永不过时的推拉手镯 精致纹..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"经典永不过时的推拉手镯 精致纹理 日常通勤约会都能戴 经典永不过时的推拉手镯 精致纹理 日常通勤约会都能戴 - MANA..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"个喜欢，来抖音，记录美好生活！ 经典永不过时的推拉手镯 精致纹理 日常通勤约会都能戴..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#25 · GMV 1w-2.5w · 互动 1714 · 时长 210s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654110001312566578" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">老师傅推荐，老伙计快来领取你的专属奖励</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_396501b23d9836637e3022dc882ab388_sx_208409_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金吊坠 L4祥云算盘吊坠国潮民族风财源守护百搭男女项坠</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;项链&gt;项坠/吊坠 · ¥148.8</div>
+          <div class="sub">小店: 万清严选 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/a817b1c59a33db383a6d31dfacd3ef26.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>万清严选</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 82 · 抖音号 25255648712</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>0-250</b></div>
+        <div><span>点赞</span><b>797</b></div>
+        <div><span>评论</span><b>443</b></div>
+        <div><span>分享</span><b>29</b></div>
+        <div><span>互动率</span><b>47.8%</b></div>
+        <div><span>GPM</span><b>5000-1w</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-31s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"这个桌子 两万多的 喜不喜欢 你看一下有几个 好 说我不敢给 你不用看谁的脸色 我告诉你 喜欢是不是..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"我自己最喜欢的 最喜欢的一个桌子 我曾经把这些东西看得太重要了 但现在我都无所谓了 我都放下了 知道他了好的 知道他的贵..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"不舍得买 有的很多姐姐说 嫌子 这么多年手上都没带过这个东西 我希望在我有能力的时候 还有发言权的时..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#26 · GMV 1w-2.5w · 互动 4938 · 时长 56s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7652379780998809317" target="_blank" class="play-wrap">
+        <img src="video_frames/026_7652379780998809317_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">手钩拉菲草真的好有慵懒精致感 #发箍这样戴好美 #头饰发饰 #千金感发箍</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_f8f5c23d02e531207391e201aa615d9c_sx_2181123_www1200-1200~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>弗弗西FFX【南法花田】手钩拉菲草花朵时尚南法草编发箍</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发箍 · ¥86.39</div>
+          <div class="sub">小店: FFX官方旗舰店 · 品牌: FFX</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/fc5b2a623467aff6a93f64e39fceed7c.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>徐晓丹❤️</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 26w · 抖音号 868966546</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>0-250</b></div>
+        <div><span>点赞</span><b>2940</b></div>
+        <div><span>评论</span><b>47</b></div>
+        <div><span>分享</span><b>594</b></div>
+        <div><span>互动率</span><b>0.77%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-8s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"足足膝的这款拉菲草发布 真的就是夏天称吸我们精致度和氛泪感的一款 这个是双色的拉菲草 用朝鲜的这种手..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"很立体对不对 这个水晶是同色的鱼线一点一点 把它边支上去的你看 在不同光线下它有折射不同的光泽 而且这个拉菲草是保留了原..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"而且同时整个可以提高我们的炉顶线的整个头型 非常的远润 头肩里都输上了很多 不好 今年真的很流行就是..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#27 · GMV 5000-2w · 互动 6481 · 时长 56s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7651098937927645625" target="_blank" class="play-wrap">
+        <img src="video_frames/027_7651098937927645625_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">这个发绳也太漂亮了吧！既能当手链戴，又能当皮筋扎头发✨ 糖果配色看着就超有夏天的感觉～#女生不能拒绝的礼物 #发圈推荐 #平价又高级的饰品分享 #多巴胺手环 #</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/png_m_a0ea13f61227945b0ece17cc6eed143e_sx_584626_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>APM彩虹电话线发圈新款时尚明星同款高弹力发绳无痕不伤发皮筋女</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥19.9</div>
+          <div class="sub">小店: APM官方旗舰店 · 品牌: APM</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/1e6535f5902b877b13ea1713412fed2d.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>陈千万</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 1.8w · 抖音号 Cpr0727</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>250-1000</b></div>
+        <div><span>点赞</span><b>3849</b></div>
+        <div><span>评论</span><b>35</b></div>
+        <div><span>分享</span><b>974</b></div>
+        <div><span>互动率</span><b>0.47%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-8s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"俗书系的这款拉菲草发布 真的就是夏天称吸我们精致度和氛泪感的一款 这个是双色的拉菲草 用朝鲜的这种手..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"很立体对不对 这个水晶是同色的鱼线一点一点 把它边秩上去的 你看在不同光线下 它有折射不同的光泽 而且这个拉菲草是保留了..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"而且同时整个可以提高我们的露顶线的整个头型 非常的远润 头肩比都输上了很多 哇 今年真的很流行就是拉..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#28 · GMV 1w-2.5w · 互动 5696 · 时长 69s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7647831533046287635" target="_blank" class="play-wrap">
+        <img src="video_frames/028_7647831533046287635_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">老婆戴上这款项链吊坠，成功男士都在戴，太有面子了！</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/obj/ecom-shop-material/png_m_a2d54d096cbd227de119eaf60461ee7c_sx_1715340_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>【年年有鱼】时尚百搭双鱼项链吊坠小众设计</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;项链&gt;项坠/吊坠 · ¥29</div>
+          <div class="sub">小店: 凯韵饰界 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/7e6d44b81e306a9a7d7fd08ebfb2a460.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>凯韵饰界</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 13 · 抖音号 91882461925</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>3745</b></div>
+        <div><span>评论</span><b>492</b></div>
+        <div><span>分享</span><b>246</b></div>
+        <div><span>互动率</span><b>0.55%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"老婆戴上这款项链吊坠，成功男士都在戴，太有面子了！ 老婆戴上这款项链吊坠，成功男..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"老婆戴上这款项链吊坠，成功男士都在戴，太有面子了！ 老婆戴上这款项链吊坠，成功男士都在戴，太有面子了！ - 凯韵饰界于2..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"个喜欢，来抖音，记录美好生活！ 这项链戴上太霸气了！老婆戴了一个星期都舍不得脱！..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#29 · GMV 1w-2.5w · 互动 418 · 时长 168s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7654118305891913010" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">不要再戴过时的耳环了！这款锆石耳环，戴上倍有面子！</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/webp_m_77b2682e1fc961e3b60c6ee7086d4d9a_sx_74980_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金耳饰 合金仿珍珠耳饰 新款轻奢时尚百搭锆石耳饰高级感耳环</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳环 · ¥29.67</div>
+          <div class="sub">小店:  · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/4d4446ccbe7b89ecebb5fe1c28dcf89f.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>时雨园艺小铺</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 33 · 抖音号 56444285755</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>300</b></div>
+        <div><span>评论</span><b>12</b></div>
+        <div><span>分享</span><b>12</b></div>
+        <div><span>互动率</span><b>0.68%</b></div>
+        <div><span>GPM</span><b>250-500</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-25s）</div>
+        <div class="block-tag">送礼场景开场</div>
+        <div class="block-text">"这个吊嘴你抢到开心一辈子了 一万多的 你看有几个 今天我拿出来我不卖我直接送给我的朋友去带 我带了快..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"今天挑八个姐姐 送给我直播间所有有缘的朋友一单有费给我给上去 就是我个快迪费 你们出个快迪费妹妹打报到你们家送给你们带的..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"这个辈子能对自己好千万不要对自己差 抢不到的一会把我两万多的鞋子拿出来 拿那个贵的拿我那个所有鞋子里..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#30 · GMV 1w-2.5w · 互动 2907 · 时长 171s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653148703544462633" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_86431593b3a21082c22e32a9224908ee_sx_35929_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳钉 · ¥64.67</div>
+          <div class="sub">小店: 锦颜美妆小铺 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/96450124460c735f8f2041170c154946.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>锦颜美妆小铺</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4 · 抖音号 90013040279</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>250-500</b></div>
+        <div><span>点赞</span><b>1805</b></div>
+        <div><span>评论</span><b>28</b></div>
+        <div><span>分享</span><b>205</b></div>
+        <div><span>互动率</span><b>0.52%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-25s）</div>
+        <div class="block-tag">送礼场景开场</div>
+        <div class="block-text">"这个你抢到开心一辈子了 一万多的 你看有几个 今天我拿出来 我不卖我直接送给我的朋友去带 我带了快十..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"送给我直播间所有有缘的朋友 一单有费给我给上去 就收个快迹费 你们出个快迹费妹妹打包到你们家送给你们带的 什么都好缺点就..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"你们要记住一句话 这个辈子能对自己好千万不要对自己差 抢不到卓子的一会把我两万多的拿出来 拿那个贵的..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#31 · GMV 1w-2.5w · 互动 905 · 时长 40s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7649008582100290822" target="_blank" class="play-wrap">
+        <img src="video_frames/031_7649008582100290822_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">合金手链 【两世欢莲子】时尚百搭手链串珠手串小众设计送老婆</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/dXzXGwkX_m_7e1cb25c5443521f98d9af4991006c0d_sx_857794_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金手链 【两世欢莲子】时尚百搭手链串珠手串小众设计送老婆女生</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;手链 · ¥19.9</div>
+          <div class="sub">小店: 星期七优选 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/1cd0a2a6bb46c2349e27fcfb1ec59c1d.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>星期七优选</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 1.6w · 抖音号 21903120954</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>638</b></div>
+        <div><span>评论</span><b>56</b></div>
+        <div><span>分享</span><b>37</b></div>
+        <div><span>互动率</span><b>0.47%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"你在看一下背面360度 来 我再给你看一下 今天一个小小的耳机 我让你记住我来 Cover 听到了没..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"你不要看它是个小耳 但它带上去特别修摄联系 而且关键是看我的背面 背面都好感 你大小在乱 看得没有 你不用有颜值 你就随..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"当然它也不适合夏天 但如果你容易晒黑的话 我跟你讲真的不要看进 你就去买小命记色 你就去买小命记色..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#32 · GMV 1w-2.5w · 互动 4.2w · 时长 184s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7636079029552024851" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">活动只要3块8，扭扭夹的多种用法，简单好看清爽凉快整个夏天 #夏天发型 #扭扭夹 #编发教程 #发型</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_024a88ea70d79bec6289e322a747dc36_sx_77809_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>轻奢高定一字夹后脑勺高级感扭扭夹大号发量多发卡发夹</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发夹 · ¥3.8</div>
+          <div class="sub">小店: 曦瑶精选饰品店 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/7a617d7aec616a03ac86878eeb8c827f.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>樱桃小丸子</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 2.4w · 抖音号 84659676923</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>2500-5000</b></div>
+        <div><span>点赞</span><b>1.8w</b></div>
+        <div><span>评论</span><b>223</b></div>
+        <div><span>分享</span><b>4290</b></div>
+        <div><span>互动率</span><b>0.63%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-27s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"这个桌子 两万多的 喜不喜欢 你也看下有几个 说我不敢给 你不用看谁的脸色 我告诉你 喜欢是不是 好..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"我自己最喜欢最爱的桌子 今天我挑五个人给 答应妹妹自己带 不是自己带的 不要臭这个热闹 我不给的 没关系 五个一次性到位..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"还有很多姐姐 样子给我留一个吧 我年纪大了 抢不过别人 还有很多新疆的姐姐说 抢不到年纪 抢不到就没..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#33 · GMV 1w-2.5w · 互动 1.7w · 时长 194s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7633380340236602643" target="_blank" class="play-wrap">
+        <img src="video_frames/033_7633380340236602643_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">加粗加厚发绳</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/uwUfuTIP_m_2c8a10ab75576480b8763157b48ebcec_sx_1705955_www2409-2409~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>秋冬加粗毛毛发圈扎马尾丸子头简约头绳高弹力不伤发皮筋成人发绳</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥9.74</div>
+          <div class="sub">小店: 檬昕电子商务商行 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/e8de807f501bbfee748661af802ec463.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>檬昕发饰</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4.9w · 抖音号 mengxindianz</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>1.2w</b></div>
+        <div><span>评论</span><b>96</b></div>
+        <div><span>分享</span><b>511</b></div>
+        <div><span>互动率</span><b>0.18%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"加粗加厚发绳 加粗加厚发绳 - 檬昕发饰于20260427..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"加粗加厚发绳 加粗加厚发绳 - 檬昕发饰于20260427发布在抖音，已经收获了36.6万个喜欢，来抖音，记录美好生活！..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"！ #头绳#发绳发圈#加粗加厚高弹力头绳 #高马尾#扎头发..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#34 · GMV 1w-2.5w · 互动 926 · 时长 36s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653838161595944242" target="_blank" class="play-wrap">
+        <img src="video_frames/034_7653838161595944242_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">这个耳环是真的很推荐，非常非常好搭配！懒人搭配神器！</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_9df9d81a729e5bf9de220f67267cd224_sx_4192938_www2048-2048" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金仿珍珠耳饰 新款轻奢时尚百搭锆石耳饰高级感耳环</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳环 · ¥15.69</div>
+          <div class="sub">小店: 星月饰家 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/ee46dfe2a3e4add5ff2996ee0994d91c.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>星月饰家</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 883 · 抖音号 97498971079</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>626</b></div>
+        <div><span>评论</span><b>39</b></div>
+        <div><span>分享</span><b>33</b></div>
+        <div><span>互动率</span><b>0.62%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-5s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"如果你的麻烦片死活都砸不跳 你就去用它 它就像汗在你的头顶上..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"文色不动..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"头都是非常好用的 帐号的麻烦片 立体有型 一整天不会脱落下来 喜欢的 我只不见..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#35 · GMV 1w-2.5w · 互动 5625 · 时长 171s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7644189041822321970" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">我超爱的干发发圈，这个秋冬被它疯狂种草，简直不要太方便，超吸水，还能速干打造欧式大波浪！#头发护理 #护发</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/obj/ecom-shop-material/jpeg_m_546d891f788513f1428332e7a8c2b674_sx_133046_www1024-1024" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>新款吸水毛巾发圈加大加厚大肠圈女速干不伤发干发神器超吸水</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥53.38</div>
+          <div class="sub">小店: 富贵的小饰界 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/6a7e826678f8dd22cd36ad4248a56728.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>富贵优选</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 2.5w · 抖音号 Han100358</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>250-500</b></div>
+        <div><span>点赞</span><b>3590</b></div>
+        <div><span>评论</span><b>80</b></div>
+        <div><span>分享</span><b>447</b></div>
+        <div><span>互动率</span><b>0.17%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-25s）</div>
+        <div class="block-tag">送礼场景开场</div>
+        <div class="block-text">"这个你抢到开心一辈子了 有万多的 你看有几个 今天我拿出来 我不卖我直接送给我的朋友去带 我带了快十..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"送给我直播间 所有有缘的朋友一单有费给我给上去 就是我个快迪费 你们出个快迪费妹妹打包到你们家送给你们带的 什么都好缺点..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"这个辈子能对自己好千万不要对自己差 抢不到卓子的一会把我两万多得拿出来 拿那个贵的拿我那个所有鞋子里..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#36 · GMV 1w-2.5w · 互动 637 · 时长 61s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653673092740320518" target="_blank" class="play-wrap">
+        <img src="video_frames/036_7653673092740320518_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">#发饰分享 #发型教程 高弹力头绳</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_9fc0412464a1733874994901834aecd3_sx_1443779_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>高颜值彩色豆豆发圈头绳扎头发马尾丸子头高弹力橡皮筋不伤发发绳</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥12.9-19.9</div>
+          <div class="sub">小店: 海克斯甄选 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/3dc746c332f8abf30b69048249d2f70a.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>海克斯甄选</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 6295 · 抖音号 38234089224</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>425</b></div>
+        <div><span>评论</span><b>5</b></div>
+        <div><span>分享</span><b>25</b></div>
+        <div><span>互动率</span><b>0.1%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"#发饰分享 #发型教程 高弹力头绳 #发饰分享 #发型教程 高弹力..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"#发饰分享 #发型教程 高弹力头绳 #发饰分享 #发型教程 高弹力头绳 - 海克斯甄选于20260621发布在抖音，已经..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"个喜欢，来抖音，记录美好生活！ #发饰分享 #发型教程 高弹力头绳..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#37 · GMV 1w-2.5w · 互动 766 · 时长 61s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653773014387729905" target="_blank" class="play-wrap">
+        <img src="video_frames/037_7653773014387729905_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">小物件真的能凸现一个女生的贵气！ 如钻石般闪耀的发圈，一眼爱！</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/png_m_95e92d815770d70ce75a43c71a19b88a_sx_845590_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>APM水晶发圈时尚个性扎头高弹力发绳潮酷高级百搭甜美马尾发饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥19.63</div>
+          <div class="sub">小店: APM官方旗舰店 · 品牌: APM</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/6e44d360b472c176e70594ff1ad41b70.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>漏风大稀牙</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 4w · 抖音号 54279297719</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>451</b></div>
+        <div><span>评论</span><b>39</b></div>
+        <div><span>分享</span><b>146</b></div>
+        <div><span>互动率</span><b>0.43%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">社交场景开场</div>
+        <div class="block-text">"小物件真的能凸现一个女生的贵气！ 如钻石般闪耀的发圈，一眼爱！ 小物件真的能凸现一个女生的贵气..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"小物件真的能凸现一个女生的贵气！ 如钻石般闪耀的发圈，一眼爱！ 小物件真的能凸现一个女生的贵气！ 如钻石般闪耀的发圈，一..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"个喜欢，来抖音，记录美好生活！ 小物件真的能凸现一个女生的贵气！ 如钻石般闪耀的发圈，一眼爱！..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#38 · GMV 1w-2.5w · 互动 3136 · 时长 49s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7652624533127482643" target="_blank" class="play-wrap">
+        <img src="video_frames/038_7652624533127482643_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">活动只要3块99，一根豹纹格子高弹力发圈</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_3b1c8329a4309d5ff4cca6e8730615f9_sx_540436_www1080-1080~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>【豹纹格子系】网纱气质裙摆小肠时尚发圈高弹力百搭不伤发头绳</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥3.99</div>
+          <div class="sub">小店: 曦瑶精选饰品店 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/6c3fac275a67d462b88899009064129c.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>草莓酱</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 8570 · 抖音号 65398168662</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>2500-5000</b></div>
+        <div><span>点赞</span><b>1812</b></div>
+        <div><span>评论</span><b>14</b></div>
+        <div><span>分享</span><b>144</b></div>
+        <div><span>互动率</span><b>0.19%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-7s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"你们敢不敢用零七的发泉绑头发 19块9我买到了两个apm的水晶发泉 我的妈呀她可是apm嘛就是我小时..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"不吃早餐一个月才买的 而且每天还绑在那个手上选药 她们这批的外包装有售损 所以说这个价格全部清掉 我在拍这个视频的时候 ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"她绑麻围 绑那种蓝刺头 非常紧 她是不会掉下来的 这价格我直接号了四条 非常推荐这个紫色 这个紫色 ..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#39 · GMV 1w-2.5w · 互动 4368 · 时长 28s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7652350411634547194" target="_blank" class="play-wrap">
+        <img src="video_frames/039_7652350411634547194_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">#升级加粗木耳边头绳#发绳发圈#高马尾#扎头发#不伤发头绳</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_85c980415bd2856ae36b511e4d9712a1_sx_1629234_www2409-2409~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>升级加粗木耳边发圈扎高马尾丸子头发绳无接缝时尚简约头绳皮筋</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥9.7</div>
+          <div class="sub">小店: 檬昕电子商务商行 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/e8de807f501bbfee748661af802ec463.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>檬昕发饰</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4.9w · 抖音号 mengxindianz</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>2925</b></div>
+        <div><span>评论</span><b>28</b></div>
+        <div><span>分享</span><b>168</b></div>
+        <div><span>互动率</span><b>0.23%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-4s）</div>
+        <div class="block-tag">社交场景开场</div>
+        <div class="block-text">"用了它之后,你真的再也看不上其他细皮筋扎头发了 不是这个暴纹欧跟沙复古发圈..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"那圈还是高弹力的牛奶丝 扎头发不紧绷 简单来个低马尾就很有韩系松弛感 夏天不是和用这种单调的细皮筋了 扎低马尾像路人、扎..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"天气热了 几秒钟一扭一扭就能拥有清熟风的溶蓝感低盘发..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#40 · GMV 1w-2.5w · 互动 2768 · 时长 15s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653067115863759546" target="_blank" class="play-wrap">
+        <img src="video_frames/040_7653067115863759546_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">终于找到一款好用不伤发的#头绳#新升级加粗木耳边头绳#扎高马尾 立体有型不松散#大人小孩都可以用 #发绳发圈</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_85c980415bd2856ae36b511e4d9712a1_sx_1629234_www2409-2409~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>升级加粗木耳边发圈扎高马尾丸子头发绳无接缝时尚简约头绳皮筋</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发绳/发圈 · ¥9.7</div>
+          <div class="sub">小店: 檬昕电子商务商行 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/e8de807f501bbfee748661af802ec463.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>檬昕发饰</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 4.9w · 抖音号 mengxindianz</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>1806</b></div>
+        <div><span>评论</span><b>7</b></div>
+        <div><span>分享</span><b>107</b></div>
+        <div><span>互动率</span><b>0.13%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-2s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"渣头发别再用这种细皮筋了..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"快来试试这个升级加从墨尔边高弹力头省 渣马尾不雷不扯头皮 柔软又舒适 立体还青春有活力 重要的是大人小孩都可以用..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#41 · GMV 1w-2.5w · 互动 1 · 时长 15s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7628080359120456966" target="_blank" class="play-wrap">
+        <img src="video_frames/041_7628080359120456966_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">春夏天戴的脚链来了，高级又百搭，寓意好好#脚链 #首饰分享 #仙女必备 #美出高级感</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_e4522b13f9ac55659aeaa711db82baee_sx_425918_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金脚链  一帆风顺不掉色镂空铃铛时来运转脚链气质百搭女神节L</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;脚链 · ¥29.9</div>
+          <div class="sub">小店: 型麦饰品旗舰店 · 品牌: SHOMARNE/型麦</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/6fba7c10f149b3e80e9264d5992bb3ce.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>型麦饰品旗舰店</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 2.3w · 抖音号 51500402947</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>1</b></div>
+        <div><span>评论</span><b>0</b></div>
+        <div><span>分享</span><b>0</b></div>
+        <div><span>互动率</span><b>2.13%</b></div>
+        <div><span>GPM</span><b>25w-50w</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-2s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"渣头发别再用这种细皮筋了..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"快来试试这个升级加从墨尔边高弹力头省 渣马尾不雷不扯头皮 柔软又舒适 立体还青春有活力 重要的是大人小孩都可以用..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#42 · GMV 1w-2.5w · 互动 1.5w · 时长 76s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7648598840550968586" target="_blank" class="play-wrap">
+        <img src="video_frames/042_7648598840550968586_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">时尚好看百搭#手镯#首饰分享 #穿搭</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/webp_m_3a2c37e0bb105cf98f4267e7797bcbea_sx_63104_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金手镯 花开富贵可推拉时尚女款手镯适合送老婆妈妈的礼物</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;手镯 · ¥9</div>
+          <div class="sub">小店: 梦莲甄选百货店 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/ff337c71c9ecc6a2e46ea7cf081dae6f.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>梦莲甄选百货店</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 97 · 抖音号 44217368618</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>1.1w</b></div>
+        <div><span>评论</span><b>581</b></div>
+        <div><span>分享</span><b>450</b></div>
+        <div><span>互动率</span><b>1.71%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"时尚好看百搭#手镯#首饰分享 #穿搭 时尚好看百搭#手镯#首饰分享 #穿搭 ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"时尚好看百搭#手镯#首饰分享 #穿搭 时尚好看百搭#手镯#首饰分享 #穿搭 - 梦莲甄选百货店于20260607发布在抖..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"音，记录美好生活！ 花开富贵手镯，送给妈妈，送给最爱的人，送她一款好的手镯！..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#43 · GMV 1w-2.5w · 互动 1.2w · 时长 210s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7631183734863170858" target="_blank" class="play-wrap">
+        <img src="video_frames/043_7631183734863170858_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">属马的姐妹看过来！十二生肖新中式耳扣，防敏百搭，年节戴显福气～# 十二生肖耳饰 #50 + 女性饰品</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/png_m_0f592eac2f3370258c37e854323e6496_sx_1897742_www1179-1179~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>【十二生肖新中式耳环】复古经典雕刻轻奢百搭</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳环 · ¥11.9</div>
+          <div class="sub">小店: 双蔻珠宝 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/f91d7ff506816b0bb96a34b4684d2f72.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>双蔻珠宝</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 1.7w · 抖音号 28597456442</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>8009</b></div>
+        <div><span>评论</span><b>60</b></div>
+        <div><span>分享</span><b>911</b></div>
+        <div><span>互动率</span><b>0.35%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">亲昵称呼开场</div>
+        <div class="block-text">"属马的姐妹看过来！十二生肖新中式耳扣，防敏百搭，年节戴显福气～# 十二生肖耳饰 #50 + 女性饰品..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"属马的姐妹看过来！十二生肖新中式耳扣，防敏百搭，年节戴显福气～# 十二生肖耳饰 #50 + 女性饰品 属马的姐妹看过来！..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"7万个喜欢，来抖音，记录美好生活！ 防过敏还百搭！十二生肖耳饰，简约高级，年节聚会显气质，耐戴不褪色..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#44 · GMV 1w-2.5w · 互动 1778 · 时长 69s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653272771354512682" target="_blank" class="play-wrap">
+        <img src="video_frames/044_7653272771354512682_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">差距也太大了吧！气质都变了！ #发型教程 #高马尾抓夹 #简单好看发型 #一学就会系列 #新年发型</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_7ef60b29a5d38004fca40741e7ff0acf_sx_244235_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>珍美妮新款异形抓夹女发量少后脑勺鲨鱼夹百搭气质头饰小号发卡</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发夹 · ¥6.9</div>
+          <div class="sub">小店: 棒棒糖糖优选 · 品牌: 珍美妮</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/9c18342ff09f10b427a935496524d1db.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>棒棒糖糖优选</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 548 · 抖音号 78867087066</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>2500-5000</b></div>
+        <div><span>点赞</span><b>961</b></div>
+        <div><span>评论</span><b>15</b></div>
+        <div><span>分享</span><b>95</b></div>
+        <div><span>互动率</span><b>0.32%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"差距也太大了吧！气质都变了！ #发型教程 #高马尾抓夹 #简单好看发型 #一学就会系列 #新年发型 ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"差距也太大了吧！气质都变了！ #发型教程 #高马尾抓夹 #简单好看发型 #一学就会系列 #新年发型 差距也太大了吧！气质..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"来抖音，记录美好生活！ 同样是抓夹，差距咋就这么大！马尾这样扎太夯了！ #发型教程 #抓夹用法 #马..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#45 · GMV 1w-2.5w · 互动 244 · 时长 111s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653770252756634899" target="_blank" class="play-wrap">
+        <img src="video_frames/None" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">夏天的碎发用闪亮亮～倒插梳，清爽气质又百搭，拍照出片也是绝绝子#碎发夹好用又好看#碎发整理#头饰发饰真的很加分</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/obj/ecom-shop-material/png_m_c52857c6ce4d61b4aff14785993d248c_sx_332662_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>韩国轻奢高级感蝴蝶结水钻倒插梳时尚百搭后脑勺盘发头饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发夹 · ¥29.79</div>
+          <div class="sub">小店: 美乐佳好物精选 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/2be87d1d5de9d0ff6492f3c17ab5be67.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>美乐佳好物精选</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 2w · 抖音号 20438523956</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>500-1000</b></div>
+        <div><span>点赞</span><b>156</b></div>
+        <div><span>评论</span><b>0</b></div>
+        <div><span>分享</span><b>11</b></div>
+        <div><span>互动率</span><b>0.26%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-16s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"1 2 3 4 因为这种夹子他把手太长了 夹在头上的时候一看 炸一看就还行 仔细看梦心间 之后你立头..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"掉可以 抬头就得回来吧 他回不去了 就是因为他把它隔在外边了 一个是露间间 一个是把手太高了 所以这个夹子不是个空障碍 ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"脑鲜还漏整 就是这一本比我酥的 那怎么办 皮开 手指身进去 皮开 留掉一份发料 这样你就能夹了吗 然..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#46 · GMV 1w-2.5w · 互动 2010 · 时长 53s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7647775379196841270" target="_blank" class="play-wrap">
+        <img src="video_frames/046_7647775379196841270_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">一根高弹力皮筋和网纱丸子头抓夹做的丸子头发型圆润又饱满#盘发 #丸子头 #高弹力皮筋</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/img/ecom-shop-material/jpeg_m_d5f26f6a805d3c041fcbeb30b4b67e43_sx_99398_www800-800~tplv-dy-shrink:750:750.webp" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>诗泊雅 新款褶皱款气质百搭网纱款简约优雅丸子抓夹</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;发饰&gt;发夹 · ¥9.9</div>
+          <div class="sub">小店: 诗泊雅饰品旗舰店 · 品牌: 诗泊雅</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/da129bcc75d31f665b3e99c5d5a133cb.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>博迈小槿溪</b> <span class="badge"></span></div>
+          <div class="sub">粉丝 4735 · 抖音号 38850606442</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>1235</b></div>
+        <div><span>评论</span><b>2</b></div>
+        <div><span>分享</span><b>69</b></div>
+        <div><span>互动率</span><b>0.36%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-8s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"我还以为这个道插书只能打理不听话的流喊 没想到还藏着这么多小亲机 剪约的麻花变搭配上他 甜美可爱 那..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"再反着插进头发里 显连小的元气公主头立马就出来了 高丸之后脑扫砸乱的碎发 用它书一书一秒轻轻爽爽 而且怎么甩头都不会掉 ..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"这样一个增高炉顶 咸链小的公主头就完成了 而且真的随便你这样晃 这样摇还是这样甩 都是怎么摇晃都不会..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#47 · GMV 1w-2.5w · 互动 2828 · 时长 210s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653509532965981482" target="_blank" class="play-wrap">
+        <img src="video_frames/047_7653509532965981482_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">法式又优雅，轻奢又高级，温柔又百搭，拯救了我的春夏搭配！怎么搭配发型搭配衣服都好看！#耳饰</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_4600019d3b79fa1dcbe8e9666b44a0b1_sx_121587_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金耳饰 法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳钉 · ¥12.71</div>
+          <div class="sub">小店: 顺意百货生活市集 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/38758bbf565c5233c7cff52e67966721.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>顺意百货生活市集</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 178 · 抖音号 45928242809</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>1642</b></div>
+        <div><span>评论</span><b>18</b></div>
+        <div><span>分享</span><b>218</b></div>
+        <div><span>互动率</span><b>0.65%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-31s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"越老的女人越要砸完子头 但你以为瓦子头是这样砸的吗 其实你都砸错了 不要把瓦子头越砸越土 越追头皮了..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"这位置不要丑 其实有个好看的发现 并不是说 你非要学练怎么复杂的手法 你会选夹子选对的就示范公备 你会跟这种夹子 然后把..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#48 · GMV 1w-2.5w · 互动 5474 · 时长 40s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653502175112432938" target="_blank" class="play-wrap">
+        <img src="video_frames/048_7653502175112432938_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">戴上一整个惊艳的耳钉分享，出门逛街随意搭配都好看 #耳环 #耳钉 #美出高级感的饰品 #网红饰品</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_4600019d3b79fa1dcbe8e9666b44a0b1_sx_121587_www1080-1080" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>合金耳饰 法式气质轻奢百搭泡泡耳环耳钉小众首饰高级感耳饰</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳钉 · ¥12.71</div>
+          <div class="sub">小店: 顺意百货生活市集 · 品牌: </div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/38758bbf565c5233c7cff52e67966721.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>顺意百货生活市集</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 178 · 抖音号 45928242809</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>3166</b></div>
+        <div><span>评论</span><b>42</b></div>
+        <div><span>分享</span><b>427</b></div>
+        <div><span>互动率</span><b>0.72%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"你在看一下背面360度 来 我再给你看一下 今天一个小小的耳机 我让你记住我来 卡班 听到了没有..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"你不要看它是个小耳顶 但它带上去特别修摄联系 而且关键是看我的背面 背面都好感 你大小跟段 看得没有 你不用有颜值 你就..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"当然它也不适合夏天 但如果你容易晒黑的话 我跟你讲真的不要看进 你就是买小命记色 你就是买小命记色..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#49 · GMV 1w-2.5w · 互动 2963 · 时长 40s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7653040027928186148" target="_blank" class="play-wrap">
+        <img src="video_frames/049_7653040027928186148_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">不挑衣服不挑人！黄皮戴也巨显白的四叶草手链，给你的对象买一条这样的手链，让她立马气质飙升！</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p3-aio.ecombdimg.com/obj/ecom-shop-material/png_m_a9cf6e88a42e072cde8a936c38af63b9_sx_4268055_www2048-2048" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>手链 金色爱心四叶草花双面立体镂空时尚百搭手链高级女款手链</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;手饰&gt;手链 · ¥13</div>
+          <div class="sub">小店: 沐拾饰品 · 品牌: 潮金周</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/5d380258b7de2cb373dd9c18601069e5.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>沐拾饰品</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 3876 · 抖音号 90450849442</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>2181</b></div>
+        <div><span>评论</span><b>110</b></div>
+        <div><span>分享</span><b>190</b></div>
+        <div><span>互动率</span><b>0.94%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#fff1b8;color:#ad6800;padding:1px 6px;border-radius:8px;margin-left:6px">基于口播文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场钩子（0-6s）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"你在看一下背面360度 来 我再给你看一下 今天一个小小的耳机 我让你记住我来 卡班 听到了没有..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（卖点演示）</div>
+        <div class="block-text">"你不要看它是个小耳顶 但它带上去特别修摄联系 而且关键是看我的背面 背面都好感 你大小跟段 看得没有 你不用有颜值 你就..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（CTA）</div>
+        <div class="block-text">"当然它也不适合夏天 但如果你容易晒黑的话 我跟你讲真的不要看进 你就是买小命记色 你就是买小命记色..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="rank-band">#50 · GMV 1w-2.5w · 互动 7683 · 时长 195s</div>
+  
+  <div class="body">
+    <!-- 左：拼图 -->
+    <div class="left">
+      <a href="https://www.douyin.com/video/7652635402746006810" target="_blank" class="play-wrap">
+        <img src="video_frames/050_7652635402746006810_grid.jpg" loading="lazy">
+        <span class="play-btn">▶</span>
+      </a>
+    </div>
+    
+    <!-- 右：信息 -->
+    <div class="right">
+      <div class="title">【新中式耳环】时尚复古轻奢百搭高级感小巧精致</div>
+      
+      <!-- 商品 + 达人 -->
+      <div class="row-info">
+        <img src="https://p9-aio.ecombdimg.com/obj/ecom-shop-material/webp_m_04d3d10447cf0cb4a714bef10731d79a_sx_37978_www768-768" class="thumb" loading="lazy">
+        <div class="info-text">
+          <div><b>耳饰 【新中式耳环】时尚复古轻奢百搭高级感小巧精致</b></div>
+          <div class="sub">钟表配饰&gt;时尚饰品&gt;耳饰&gt;耳环 · ¥13.93</div>
+          <div class="sub">小店: 沐拾饰品 · 品牌: 潮金周</div>
+        </div>
+      </div>
+      <div class="row-info">
+        <img src="https://logocdn.feigua.cn/BloggLogo/5d380258b7de2cb373dd9c18601069e5.jpg" class="thumb thumb-round" loading="lazy">
+        <div class="info-text">
+          <div><b>沐拾饰品</b> <span class="badge">店铺账号</span></div>
+          <div class="sub">粉丝 3876 · 抖音号 90450849442</div>
+        </div>
+      </div>
+      
+      <!-- KPI -->
+      <div class="kpis">
+        <div><span>销量</span><b>1000-2500</b></div>
+        <div><span>点赞</span><b>5865</b></div>
+        <div><span>评论</span><b>296</b></div>
+        <div><span>分享</span><b>509</b></div>
+        <div><span>互动率</span><b>1.09%</b></div>
+        <div><span>GPM</span><b>0-250</b></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- 素材脚本解析 -->
+  <div class="script">
+    <div class="script-title">📋 素材脚本解析 <span style="font-size:10px;background:#ffd591;color:#ad4e00;padding:1px 6px;border-radius:8px;margin-left:6px">无音频 · 基于视频文案</span></div>
+    <div class="script-grid">
+      <div class="script-block">
+        <div class="block-label">开场（文案前段）</div>
+        <div class="block-tag">无明显钩子</div>
+        <div class="block-text">"【新中式耳环】时尚复古轻奢百搭高级感小巧精致 【新中式耳环】时尚复古轻奢百搭高级感小巧..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">中段（文案主体）</div>
+        <div class="block-text">"【新中式耳环】时尚复古轻奢百搭高级感小巧精致 【新中式耳环】时尚复古轻奢百搭高级感小巧精致 - 沐拾饰品于2026061..."</div>
+      </div>
+      <div class="script-block">
+        <div class="block-label">收尾（文案末段）</div>
+        <div class="block-text">"好生活！ 一眼心动的耳扣，马年戴它寓意美好，上耳温柔高级有质感，出门逛街随意搭配都好看..."</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</body></html>
