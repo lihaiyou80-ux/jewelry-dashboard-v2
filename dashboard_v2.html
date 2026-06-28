@@ -177,12 +177,22 @@
 
 <div id="loading">数据加载中...</div>
 
+<!-- 类目切换栏 -->
+<div class="cate-switcher" style="background:#fff;padding:10px 14px;border-radius:8px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.04);display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+  <span style="font-weight:600;color:#666;margin-right:4px;font-size:13px">切换类目：</span>
+  <a href="#jewelry" class="cate-pill" data-cate="jewelry" style="padding:7px 16px;border-radius:18px;text-decoration:none;font-size:13px;color:#666;border:1px solid #e5e7eb">💍 时尚饰品</a>
+  <a href="#glasses" class="cate-pill" data-cate="glasses" style="padding:7px 16px;border-radius:18px;text-decoration:none;font-size:13px;color:#666;border:1px solid #e5e7eb">👓 眼镜及配件</a>
+  <a href="#apparel" class="cate-pill" data-cate="apparel" style="padding:7px 16px;border-radius:18px;text-decoration:none;font-size:13px;color:#666;border:1px solid #e5e7eb">👕 服饰配件</a>
+  <a href="#wenwan" class="cate-pill" data-cate="wenwan" style="padding:7px 16px;border-radius:18px;text-decoration:none;font-size:13px;color:#666;border:1px solid #e5e7eb">📿 文玩收藏</a>
+  <span id="cate-data-note" style="margin-left:auto;font-size:11px;color:#888"></span>
+</div>
+
 <div class="header">
   <div>
-    <h1>🛍️ 飞瓜 · 时尚饰品 行业看板</h1>
-    <div class="sub">钟表配饰 → 时尚饰品（dyCateId=1000001822）· 数据 T-1</div>
+    <h1 id="header-title">🛍️ 飞瓜 · 时尚饰品 行业看板</h1>
+    <div class="sub" id="header-sub">钟表配饰 → 时尚饰品（dyCateId=1000001822）· 数据 T-1</div>
   </div>
-  <div class="date">📅 2026-06-23</div>
+  <div class="date" id="header-date">📅 2026-06-23</div>
 </div>
 
 <div class="tabs">
@@ -195,6 +205,42 @@
 
 <!-- 趋势 -->
 <div id="tab-trends" class="tab-panel active">
+  <!-- ▼ 新增：起量洞察 3 模块 ▼ -->
+  <div class="card" style="background:linear-gradient(135deg,#fff7e6 0%,#fff1f0 100%);border-left:4px solid #FF4D4F;padding:14px 18px">
+    <h3 style="color:#cf1322">🔥 起量洞察（近期飙升）<span style="font-size:11px;color:#999;font-weight:normal;margin-left:8px">基于最新一天数据的环比/类目份额</span></h3>
+    <div class="row-3" style="margin-top:10px">
+      <div style="background:#fff;border-radius:6px;padding:12px;border-left:3px solid #FF4D4F">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">🚀 起量商品（环比正增长）</div>
+        <div id="rising-goods-count" style="font-size:22px;font-weight:600;color:#FF4D4F">-</div>
+      </div>
+      <div style="background:#fff;border-radius:6px;padding:12px;border-left:3px solid #FA8C16">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">👑 飙升头客（环比正增长）</div>
+        <div id="rising-sellers-count" style="font-size:22px;font-weight:600;color:#FA8C16">-</div>
+      </div>
+      <div style="background:#fff;border-radius:6px;padding:12px;border-left:3px solid #52C41A">
+        <div style="font-size:11px;color:#888;margin-bottom:4px">📊 活跃细分类目数</div>
+        <div id="rising-cates-count" style="font-size:22px;font-weight:600;color:#52C41A">-</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-row row-2">
+    <div class="card">
+      <h3>📊 趋势最猛的细分类目 <span class="badge">按 GMV 份额</span></h3>
+      <div id="rising-cates-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px"></div>
+    </div>
+    <div class="card">
+      <h3>👑 GMV 飙升头客 <span class="badge">达人+小店</span></h3>
+      <div id="rising-sellers-list" style="display:grid;grid-template-columns:1fr;gap:6px;max-height:520px;overflow-y:auto"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🚀 起量爆品 Top 30 <span class="badge">环比涨幅 + 规则引擎打标</span></h3>
+    <div id="rising-goods-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:10px;margin-top:8px"></div>
+  </div>
+  <!-- ▲ 新增模块结束 ▲ -->
+
   <div class="card">
     <h3>📊 类目 GMV 走势 <span class="badge">视频 vs 直播</span></h3>
     <div class="trend-controls">
@@ -370,24 +416,74 @@ function qoqClass(v){
 
 let DATA = {};
 
+// ========== 类目切换 ==========
+const CATE_META = {
+  jewelry: {name:'时尚饰品', emoji:'💍', subtitle:'钟表配饰 → 时尚饰品（dyCateId=1000001822）· 数据 T-1',
+            date:'📅 2026-06-23', baseDir:'', note:'真实数字'},
+  glasses: {name:'眼镜及配件', emoji:'👓', subtitle:'钟表配饰 → 钟表眼镜 → 眼镜及配件（dyCateId=1000000026）· 数据 T-1',
+            date:'📅 2026-06-27', baseDir:'data_glasses/', note:'⚠️ 飞瓜测试号脱敏数据（区间值）'},
+  apparel: {name:'服饰配件', emoji:'👕', subtitle:'服饰内衣 → 服装 → 服装配饰（dyCateId=1000003289）· 数据 T-1',
+            date:'📅 2026-06-27', baseDir:'data_apparel/', note:'⚠️ 飞瓜测试号脱敏数据（区间值）'},
+  wenwan:  {name:'文玩收藏', emoji:'📿', subtitle:'珠宝文玩 → 文玩收藏（dyCateId=1000001468）· 数据 T-1',
+            date:'📅 2026-06-27', baseDir:'data_wenwan/', note:'⚠️ 飞瓜测试号脱敏数据（区间值）'},
+};
+
+function getCurrentCate(){
+  const h = (location.hash || '#jewelry').slice(1).split('?')[0];
+  return CATE_META[h] ? h : 'jewelry';
+}
+
+function updateHeader(slug){
+  const m = CATE_META[slug];
+  document.getElementById('header-title').textContent = `🛍️ 飞瓜 · ${m.name} 行业看板`;
+  document.getElementById('header-sub').textContent = m.subtitle;
+  document.getElementById('header-date').textContent = m.date;
+  document.getElementById('cate-data-note').textContent = m.note;
+  // 高亮当前 pill
+  document.querySelectorAll('.cate-pill').forEach(p=>{
+    if(p.dataset.cate === slug){
+      p.style.background = '#1F4E79'; p.style.color = '#fff'; p.style.borderColor = '#1F4E79';
+    } else {
+      p.style.background = ''; p.style.color = '#666'; p.style.borderColor = '#e5e7eb';
+    }
+  });
+  document.title = `${m.name} - 飞瓜行业看板`;
+}
+
 async function loadAll(){
+  const slug = getCurrentCate();
+  updateHeader(slug);
+  const base = CATE_META[slug].baseDir;
+  document.getElementById('loading').style.display='flex';
+  document.getElementById('loading').textContent = `数据加载中... (${CATE_META[slug].name})`;
+  
   const files = ['cate_trends_v2','overview','goods_basic','trends_30d',
-                 'shops_top_v2','brands_top_v2','bloggers_top_v2','goods_by_cate','goods_analysis','subcate_v2','videos_data'];
-  const results = await Promise.all(files.map(f => fetch(f+'.json').then(r=>r.json())));
-  DATA.trends     = results[0];
-  DATA.overview   = results[1];
-  DATA.goods      = results[2];
-  DATA.t30d       = results[3];
-  DATA.shops      = results[4];
-  DATA.brands     = results[5];
-  DATA.bloggers   = results[6];
-  DATA.cateGroups = results[7];
-  DATA.ga         = results[8];
-  DATA.subcate    = results[9];
-  DATA.videos     = results[10];
+                 'shops_top_v2','brands_top_v2','bloggers_top_v2','goods_by_cate','goods_analysis','subcate_v2','videos_data',
+                 'rising_modules'];
+  const fetches = files.map(f => 
+    fetch(base + f + '.json').then(r => r.ok ? r.json() : null).catch(()=>null)
+  );
+  const results = await Promise.all(fetches);
+  DATA.trends     = results[0] || {};
+  DATA.overview   = results[1] || {};
+  DATA.goods      = results[2] || [];
+  DATA.t30d       = results[3] || {};
+  DATA.shops      = results[4] || [];
+  DATA.brands     = results[5] || [];
+  DATA.bloggers   = results[6] || [];
+  DATA.cateGroups = results[7] || [];
+  DATA.ga         = results[8] || {};
+  // 饰品的 subcate_v2 是 {date, subcates:[...]} 包装
+  const sub = results[9];
+  DATA.subcate    = (sub && sub.subcates) ? sub.subcates : (sub || []);
+  DATA.videos     = results[10] || {videos:[]};
+  DATA.rising     = results[11] || {rising_cates:[], rising_goods:[], rising_sellers:[]};
   document.getElementById('loading').style.display='none';
   render();
 }
+
+// hash 变化重新加载
+window.addEventListener('hashchange', () => location.reload());
 
 // ========== 趋势 ==========
 let trendRange = '30d';
@@ -1329,6 +1425,7 @@ function renderVideos(){
 
 // ========== 初始化 ==========
 function render(){
+  renderRising();
   renderTrends();
   renderSubcate();
   renderHeads();
@@ -1336,6 +1433,94 @@ function render(){
   applyFilter();
   renderInsights();
   renderVideos();
+}
+
+// ========== 起量洞察（新增）==========
+function renderRising(){
+  const R = DATA.rising || {};
+  const cates = R.rising_cates || [];
+  const goods = R.rising_goods || [];
+  const sellers = R.rising_sellers || [];
+  
+  // KPI 计数
+  document.getElementById('rising-goods-count').textContent = goods.length + ' 个';
+  document.getElementById('rising-sellers-count').textContent = sellers.length + ' 个';
+  document.getElementById('rising-cates-count').textContent = cates.length + ' 个';
+  
+  // 起量类目卡片
+  const catesEl = document.getElementById('rising-cates-list');
+  const medals = ['🥇','🥈','🥉'];
+  if(!cates.length){
+    catesEl.innerHTML = '<div style="color:#999;padding:14px;text-align:center">暂无细分类目数据</div>';
+  } else {
+    catesEl.innerHTML = cates.map((c,i)=>{
+      const rankBadge = i<3 ? `<span style="font-size:18px">${medals[i]}</span>` 
+                            : `<span style="background:#1F4E79;color:#fff;font-size:11px;padding:1px 7px;border-radius:9px;font-weight:600">#${c.rank||(i+1)}</span>`;
+      return `<div style="background:#fafbfc;border:1px solid #eef0f5;border-radius:6px;padding:10px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          ${rankBadge}
+          <span style="font-weight:600;color:#222;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c.full_name||c.name}">${c.full_name||c.name}</span>
+        </div>
+        <div style="display:flex;gap:12px;font-size:11px;color:#666">
+          <div><span style="color:#888">GMV</span> <b style="color:#1F4E79;font-size:13px">${c.gmv_str||'-'}</b></div>
+          <div><span style="color:#888">份额</span> <b style="color:#FF4D4F;font-size:13px">${c.ratio_str||'-'}</b></div>
+          <div><span style="color:#888">商品</span> <b style="color:#444">${c.goods_count_str||'-'}</b></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  
+  // 起量头客列表
+  const sellersEl = document.getElementById('rising-sellers-list');
+  if(!sellers.length){
+    sellersEl.innerHTML = '<div style="color:#999;padding:14px;text-align:center">暂无飙升头客</div>';
+  } else {
+    sellersEl.innerHTML = sellers.map(s=>{
+      const kindBadge = s.kind === '达人' 
+        ? '<span style="background:#722ed1;color:#fff;font-size:10px;padding:1px 5px;border-radius:8px">达人</span>'
+        : '<span style="background:#1890ff;color:#fff;font-size:10px;padding:1px 5px;border-radius:8px">小店</span>';
+      const qoq = s.qoq_n;
+      const qoqPct = qoq != null ? (qoq*100).toFixed(0) + '%' : '-';
+      return `<div style="background:#fafbfc;border:1px solid #eef0f5;border-radius:6px;padding:8px 10px;display:flex;align-items:center;gap:8px">
+        <img src="${s.avatar||''}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;background:#f0f0f0;flex-shrink:0" onerror="this.style.background='#f0f0f0'">
+        <div style="flex:1;min-width:0">
+          <div style="font-weight:600;font-size:12px;color:#222;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name||'-'} ${kindBadge}</div>
+          <div style="font-size:11px;color:#888;margin-top:2px">${s.shop_type||''}${s.fans_str?' · 粉丝 '+s.fans_str:''}${s.rank?' · #'+s.rank:''}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="color:#FF4D4F;font-weight:600;font-size:15px">+${qoqPct}</div>
+          <div style="font-size:11px;color:#666">${s.gmv_str||'-'}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  
+  // 起量爆品卡片
+  const goodsEl = document.getElementById('rising-goods-list');
+  if(!goods.length){
+    goodsEl.innerHTML = '<div style="color:#999;padding:14px;text-align:center">暂无起量爆品</div>';
+  } else {
+    goodsEl.innerHTML = goods.map(g=>{
+      const reasons = (g.reasons||[]).map(r=>`<span style="display:inline-block;padding:1px 7px;font-size:10px;border-radius:9px;color:#fff;background:${r.color};line-height:1.6">${r.tag}</span>`).join(' ');
+      const noReasons = !g.reasons || !g.reasons.length;
+      const qoq = g.qoq_n;
+      const qoqPct = qoq != null ? (qoq*100).toFixed(0) + '%' : '-';
+      return `<div style="background:#fff;border:1px solid #eef0f5;border-radius:6px;padding:10px;display:flex;gap:10px">
+        <img src="${g.img||''}" style="width:84px;height:84px;border-radius:5px;object-fit:cover;flex-shrink:0;background:#f5f5f5" onerror="this.style.background='#f5f5f5'" loading="lazy">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+          <div style="font-weight:600;font-size:12px;color:#222;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${g.title||'-'}</div>
+          <div style="font-size:11px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${g.shop||'-'} · ¥${g.price||'-'} · 上架 ${(g.online||'').slice(0,10)}</div>
+          <div style="font-size:11px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${g.cate||''}</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:2px">
+            <span style="background:#FFF1F0;color:#FF4D4F;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:600">环比 +${qoqPct}</span>
+            <span style="background:#fff7e6;color:#FA8C16;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:600">${g.gmv_str||'-'}</span>
+            <span style="background:#f0f5ff;color:#1890ff;padding:1px 7px;border-radius:9px;font-size:11px">${g.sales_str||'-'}</span>
+          </div>
+          <div style="margin-top:3px">${reasons || '<span style="font-size:10px;color:#bbb">待人工标注</span>'}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
 }
 
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
