@@ -931,8 +931,30 @@ function observeCharts(){
 function drawChart(el){
   const gid = el.dataset.gid;
   const data = DATA.t30d[gid] || [];
+  // 没有日级趋势数据时，尝试用 goods_basic 里的月维度 30 天 GMV 显示 KPI 卡
   if(data.length===0){
-    el.innerHTML='<div style="text-align:center;color:#bbb;padding:50px 0;font-size:11px">近30天无数据</div>';
+    // 找该 gid 对应的 goods_basic 项，看是否有月维度 GMV
+    const g = (DATA.goods || []).find(x => x.gid === gid);
+    if (g && (g.gmv_30d_s || g.sales_30d_s)) {
+      const qoqLine = g.qoq_30d_s ? `<div style="font-size:10px;color:#888;margin-top:3px">环比上月 <b style="color:${(g.qoq_30d_s||'').startsWith('-')?'#52C41A':'#FF4D4F'}">${g.qoq_30d_s}</b></div>` : '';
+      el.innerHTML = `<div style="padding:14px;text-align:center;background:linear-gradient(135deg,#fff7e6 0%,#fff1f0 100%);border-radius:6px;border:1px dashed #ffccc7">
+        <div style="font-size:10.5px;color:#999;margin-bottom:4px">📅 2026 年 5 月（近 30 天累计）</div>
+        <div style="display:flex;justify-content:space-around;gap:8px">
+          <div>
+            <div style="font-size:10px;color:#888">GMV</div>
+            <div style="font-size:15px;font-weight:600;color:#FF4D4F">${g.gmv_30d_s||'-'}</div>
+          </div>
+          <div>
+            <div style="font-size:10px;color:#888">销量</div>
+            <div style="font-size:15px;font-weight:600;color:#FA8C16">${g.sales_30d_s||'-'}</div>
+          </div>
+        </div>
+        ${qoqLine}
+        <div style="font-size:9px;color:#bbb;margin-top:4px">飞瓜脱敏区间数据 · 无日级走势</div>
+      </div>`;
+    } else {
+      el.innerHTML='<div style="text-align:center;color:#bbb;padding:32px 0;font-size:11px">该商品近 30 天未上月榜<br><span style="font-size:10px">（即该商品近一个月累计 GMV 未进入类目 Top 1000）</span></div>';
+    }
     return;
   }
   const dates = data.map(d=>d.d);
@@ -1445,13 +1467,45 @@ function renderRising(){
   
   // 1. 文案版 headline + body + actions
   document.getElementById('narrative-headline').innerHTML = N.headline || '📊 本周大盘';
+  // 顺序按用户要求：大盘 → 商品分析（客单/卖点/属性）→ 节日时序 → 受众 → 类目/头客
   let bodyHTML = '';
   if (N.para_overview) bodyHTML += `<div style="margin-bottom:8px">${N.para_overview}</div>`;
+  // 商品分析放前面（用户要求）
+  if (N.para_price) bodyHTML += `<div style="margin-bottom:8px">${N.para_price}</div>`;
+  // 价格段直方图可视化（5 段）
+  if (N.price_buckets && N.price_buckets.length) {
+    const buckets = N.price_buckets;
+    const maxR = Math.max(...buckets.map(b => b.ratio_n || 0));
+    bodyHTML += `<div style="margin-bottom:12px;padding:10px 12px;background:rgba(255,255,255,.6);border-radius:6px">
+      <div style="display:flex;gap:6px;align-items:flex-end;height:80px">
+        ${buckets.map(b => {
+          const pct = (b.ratio_n || 0) / maxR * 100;
+          const bg = b.ratio_n >= 0.4 ? '#FF4D4F' : (b.ratio_n >= 0.15 ? '#FA8C16' : '#FFA39E');
+          return `<div style="flex:1;display:flex;flex-direction:column;align-items:center">
+            <div style="font-size:11px;color:#cf1322;font-weight:600;margin-bottom:3px">${b.ratio_str}</div>
+            <div style="width:100%;background:${bg};border-radius:3px 3px 0 0;height:${pct}%;min-height:6px"></div>
+            <div style="font-size:11px;color:#555;margin-top:4px;text-align:center;line-height:1.3">${b.title}</div>
+          </div>`;
+        }).join('')}
+      </div>
+      <div style="font-size:10px;color:#999;margin-top:6px;text-align:center">价格段分布 · 来源：飞瓜 Top1000 商品分位数</div>
+    </div>`;
+  }
+  if (N.para_goods_insight) bodyHTML += `<div style="margin-bottom:8px;padding:10px 12px;background:rgba(255,255,255,.7);border-radius:6px;border-left:3px solid #1F4E79">${N.para_goods_insight}</div>`;
+  if (N.para_festival) bodyHTML += `<div style="margin-bottom:8px;padding:10px 12px;background:rgba(255,237,200,.7);border-radius:6px;border-left:3px solid #FA8C16">${N.para_festival}</div>`;
+  if (N.para_audience) bodyHTML += `<div style="margin-bottom:8px">${N.para_audience}</div>`;
   if (N.para_top_cates) bodyHTML += `<div style="margin-bottom:8px">${N.para_top_cates}</div>`;
   if (N.para_top_sellers) bodyHTML += `<div style="margin-bottom:8px">${N.para_top_sellers}</div>`;
   if (N.para_keywords) bodyHTML += `<div style="margin-bottom:8px">${N.para_keywords}</div>`;
-  if (N.para_price) bodyHTML += `<div style="margin-bottom:8px">${N.para_price}</div>`;
-  if (N.para_audience) bodyHTML += `<div style="margin-bottom:8px">${N.para_audience}</div>`;
+  // 起量爆品标签聚合（迷你版）
+  if (N.tag_summary && N.tag_summary.length) {
+    const tags = N.tag_summary.slice(0, 5).map(t => 
+      `<span style="display:inline-block;padding:3px 9px;font-size:11.5px;border-radius:11px;background:#fff;color:#cf1322;border:1px solid #ffccc7;margin:2px"><b>${t.tag}</b> ×${t.count} (${(t.ratio*100).toFixed(0)}%)</span>`
+    ).join(' ');
+    bodyHTML += `<div style="margin-bottom:8px;padding:8px 12px;background:rgba(255,255,255,.6);border-radius:6px">
+      <span style="font-size:12px;color:#666;margin-right:6px">🏷️ Top30 爆品标签聚合：</span>${tags}
+    </div>`;
+  }
   document.getElementById('narrative-body').innerHTML = bodyHTML;
   
   // actions（行动建议）
@@ -1543,7 +1597,8 @@ function renderRising(){
           <div style="font-size:11px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${g.cate||''}</div>
           <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:2px">
             ${tierBadge}
-            <span style="background:#fff7e6;color:#FA8C16;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:600">${g.gmv_str||'-'}</span>
+            <span style="background:#fff7e6;color:#FA8C16;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:600" title="本周 GMV">周 ${g.gmv_str||'-'}</span>
+            ${g.gmv_30d_str ? `<span style="background:#f6ffed;color:#52C41A;padding:1px 7px;border-radius:9px;font-size:11px;font-weight:600" title="近 30 天累计 GMV">月 ${g.gmv_30d_str}</span>` : ''}
             <span style="background:#f0f5ff;color:#1890ff;padding:1px 7px;border-radius:9px;font-size:11px">${g.sales_str||'-'}</span>
           </div>
           <div style="margin-top:3px">${reasons || '<span style="font-size:10px;color:#bbb">待人工标注</span>'}</div>
