@@ -1,4 +1,44 @@
-<!DOCTYPE html><html><head><meta charset="utf-8">
-<title>珠宝饰品深度分析 Dashboard</title>
-<meta http-equiv="refresh" content="0;url=dashboard_v2.html">
-</head><body><p>跳转中… <a href="dashboard_v2.html">dashboard_v2.html</a></p></body></html>
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8"><title>多类目深度分析 Dashboard</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:"Microsoft YaHei","PingFang SC",-apple-system,sans-serif }
+body { background:linear-gradient(135deg,#F0F2F5 0%,#E6F4FF 100%); min-height:100vh; padding:30px 20px }
+.wrap { max-width:1100px; margin:0 auto }
+h1 { font-size:26px; color:#1F4E79; margin-bottom:6px; text-align:center }
+.subtitle { color:#666; font-size:13px; text-align:center; margin-bottom:30px }
+.cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:20px }
+.card { background:#fff; border-radius:12px; padding:24px; box-shadow:0 4px 16px rgba(0,0,0,.05); transition:all .2s; cursor:pointer; text-decoration:none; color:inherit; display:flex; flex-direction:column; align-items:center; text-align:center }
+.card:hover { transform:translateY(-4px); box-shadow:0 8px 24px rgba(31,78,121,.12) }
+.card .emoji { font-size:48px; margin-bottom:12px }
+.card .name { font-size:18px; font-weight:600; color:#1F4E79; margin-bottom:8px }
+.card .meta { font-size:12px; color:#888; line-height:1.6 }
+.card .meta span.hot { color:#FF4D4F; font-weight:600 }
+.footer { text-align:center; margin-top:40px; color:#999; font-size:12px }
+</style></head><body>
+<div class="wrap">
+  <h1>📊 抖音电商类目深度分析</h1>
+  <p class="subtitle">飞瓜数据 · 2026-06-28 更新 · 4 个类目可选</p>
+  <div class="cards">
+    <a class="card" href="dashboard_v2.html">
+      <div class="emoji">💍</div>
+      <div class="name">时尚饰品</div>
+      <div class="meta">Top 1000 爆品 / 50 视频深度分析<br><span class="hot">✓ 含视频转写</span></div>
+    </a>
+    <a class="card" href="glasses.html">
+      <div class="emoji">👓</div>
+      <div class="name">眼镜及配件</div>
+      <div class="meta">Top 1000 爆品 + 起量分析<br>起量品 <span class="hot">30</span> · 飙升头客 <span class="hot">20</span></div>
+    </a>
+    <a class="card" href="apparel.html">
+      <div class="emoji">👕</div>
+      <div class="name">服饰配件</div>
+      <div class="meta">Top 1000 爆品 + 起量分析<br>起量品 <span class="hot">30</span> · 飙升头客 <span class="hot">20</span></div>
+    </a>
+    <a class="card" href="wenwan.html">
+      <div class="emoji">📿</div>
+      <div class="name">文玩收藏</div>
+      <div class="meta">Top 1000 爆品 + 起量分析<br>起量品 <span class="hot">30</span> · 飙升头客 <span class="hot">20</span></div>
+    </a>
+  </div>
+  <div class="footer">数据来源：飞瓜接口 + 抖音原视频 · 工具：Python + ECharts</div>
+</div></body></html>
