@@ -1,0 +1,357 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8"><title>服饰配件 - 类目深度分析</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:"Microsoft YaHei","PingFang SC",-apple-system,sans-serif !important }
+body { background:#F0F2F5; padding:14px; font-size:13px; color:#222 }
+.head { background:linear-gradient(90deg,#1F4E79 0%,#2E75B6 100%); color:#fff; padding:16px 20px; border-radius:8px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center }
+.head .title { font-size:20px; font-weight:600 }
+.head .meta { font-size:12px; opacity:.85 }
+.head a { color:#fff; opacity:.7; text-decoration:none; font-size:12px }
+.head a:hover { opacity:1 }
+.tabs { display:flex; gap:6px; background:#fff; padding:6px; border-radius:6px; margin-bottom:14px; box-shadow:0 1px 3px rgba(0,0,0,.04) }
+.tab { padding:8px 16px; border-radius:5px; cursor:pointer; font-size:13px; color:#666 }
+.tab.active { background:#1F4E79; color:#fff; font-weight:600 }
+.tab-panel { display:none }
+.tab-panel.active { display:block }
+.card { background:#fff; padding:14px 18px; border-radius:8px; margin-bottom:12px; box-shadow:0 1px 3px rgba(0,0,0,.04) }
+.card h3 { font-size:15px; color:#1F4E79; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #eef0f5 }
+.card h3 .desc { font-size:11px; color:#999; font-weight:normal; margin-left:8px }
+.row-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px }
+.row-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:12px }
+
+/* 趋势卡片 */
+.t-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:10px }
+.t-card { background:#fafbfc; border:1px solid #eef0f5; border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:5px }
+.t-card .rank-row { display:flex; align-items:center; gap:8px }
+.t-card .badge { background:#FF4D4F; color:#fff; font-size:11px; padding:1px 7px; border-radius:9px; font-weight:600 }
+.t-card .badge.cool { background:#1F4E79 }
+.t-card .badge.warm { background:#FA8C16 }
+.t-card .name { font-weight:600; font-size:13px; color:#222; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.t-card .nm { font-size:11px; color:#888 }
+.t-card .acc { color:#FF4D4F; font-weight:600 }
+.t-card .kpi-row { display:flex; gap:14px; font-size:11px; color:#666; padding:4px 0 }
+.t-card .kpi-row b { color:#222; font-size:13px; font-weight:600 }
+.t-card .reasons { display:flex; gap:4px; flex-wrap:wrap }
+.chip { display:inline-block; padding:1px 6px; font-size:10px; border-radius:8px; color:#fff; line-height:1.5 }
+.spark { height:32px }
+
+/* 商品卡 */
+.g-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:10px }
+.g-card { background:#fff; border:1px solid #eef0f5; border-radius:6px; overflow:hidden; display:flex; padding:10px; gap:10px }
+.g-card img { width:80px; height:80px; object-fit:cover; border-radius:5px; flex-shrink:0; background:#f5f5f5 }
+.g-card .info { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px }
+.g-card .title { font-size:12px; font-weight:600; line-height:1.4; color:#222; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden }
+.g-card .sub { font-size:11px; color:#888; line-height:1.4 }
+.g-card .badges { display:flex; gap:5px; font-size:10px; flex-wrap:wrap }
+.g-card .badge { background:#FFF1F0; color:#FF4D4F; padding:1px 6px; border-radius:8px; font-weight:600 }
+
+/* 头客 */
+.s-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:10px }
+.s-card { background:#fff; border:1px solid #eef0f5; border-radius:6px; padding:10px; display:flex; gap:10px; align-items:center }
+.s-card img { width:46px; height:46px; border-radius:50%; object-fit:cover; background:#f5f5f5 }
+.s-card .info { flex:1; min-width:0 }
+.s-card .name { font-weight:600; font-size:13px; color:#222; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+.s-card .sub { font-size:11px; color:#888; margin-top:2px }
+.s-card .right { text-align:right }
+.s-card .acc { color:#FF4D4F; font-weight:600; font-size:15px }
+.s-card .gmv { font-size:11px; color:#666 }
+
+/* 通用 */
+.qoq.pos { color:#52C41A }
+.qoq.neg { color:#FF4D4F }
+.tag-glasses { background:#0050B3 }
+.tag-apparel { background:#EB2F96 }
+.tag-wenwan { background:#D48806 }
+
+table { width:100%; border-collapse:collapse; font-size:12px }
+table th { background:#f7f9fc; padding:6px 8px; text-align:left; color:#666; font-weight:normal }
+table td { padding:6px 8px; border-bottom:1px solid #f0f0f0 }
+.empty { color:#999; padding:20px; text-align:center }
+</style></head><body>
+<div class="head">
+  <div>
+    <div class="title">👕 服饰配件 · 类目深度分析</div>
+    <div class="meta">脱敏区间数据 · 数据日期 20260625</div>
+  </div>
+  <a href="index.html">← 切换其他类目</a>
+</div>
+<div class="tabs">
+  <div class="tab active" data-tab="trend">📈 趋势看板</div>
+  <div class="tab" data-tab="rising">🚀 起量爆品</div>
+  <div class="tab" data-tab="sellers">👑 飙升头客</div>
+  <div class="tab" data-tab="goods">🔥 爆品 Top1000</div>
+  <div class="tab" data-tab="subcate">🏆 子类目榜</div>
+</div>
+
+<div id="tab-trend" class="tab-panel active">
+  <div class="card">
+    <h3>📈 类目趋势速览 <span class="desc">最近 7 天 vs 前 23 天 加速度</span></h3>
+    <div id="trend-summary" class="row-3"></div>
+  </div>
+  <div class="card">
+    <h3>🔥 趋势最猛的细分类目 <span class="desc">基于飞瓜原生环比（QoQ）排序</span></h3>
+    <div id="trend-cates" class="t-grid"></div>
+  </div>
+</div>
+
+<div id="tab-rising" class="tab-panel">
+  <div class="card">
+    <h3>🚀 起量爆品 <span class="desc">7 天均值 / 前 23 天均值 ≥ 200% 且近 7 天有交易</span></h3>
+    <div style="font-size:11px; color:#888; margin-bottom:10px" id="rising-stats"></div>
+    <div id="rising-goods" class="g-grid"></div>
+  </div>
+</div>
+
+<div id="tab-sellers" class="tab-panel">
+  <div class="card">
+    <h3>👑 GMV 飙升头客 <span class="desc">达人 + 小店混合，按环比降序</span></h3>
+    <div id="rising-sellers" class="s-grid"></div>
+  </div>
+</div>
+
+<div id="tab-goods" class="tab-panel">
+  <div class="card">
+    <h3>🔥 爆品 Top 1000 <span class="desc">SalesGmvStr 为飞瓜脱敏区间</span></h3>
+    <div id="goods-table"></div>
+  </div>
+</div>
+
+<div id="tab-subcate" class="tab-panel">
+  <div class="card">
+    <h3>🏆 子类目榜 <span class="desc">按类目份额排序</span></h3>
+    <div id="subcate-table"></div>
+  </div>
+</div>
+
+<script>
+const SLUG = "apparel";
+let DATA = null;
+
+async function load() {
+  const r = await fetch(SLUG + '_data.json');
+  DATA = await r.json();
+  render();
+}
+
+function qoqClass(v) {
+  if (v == null) return '';
+  return v > 0 ? 'pos' : (v < 0 ? 'neg' : '');
+}
+function fmtPct(v) {
+  if (v == null) return '-';
+  const n = Number(v);
+  if (isNaN(n)) return v;
+  return (n>=10 ? n.toFixed(0) : n.toFixed(2)) + '%';
+}
+function fmtAcc(v) {
+  if (v == null) return '-';
+  if (v >= 9.99) return '999%+';
+  return (v*100).toFixed(0) + '%';
+}
+function fmtMoney(v) {
+  if (!v) return '-';
+  if (v >= 10000) return (v/10000).toFixed(1) + '万';
+  return v.toString();
+}
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  })[c]);
+}
+
+function render() {
+  renderTrendSummary();
+  renderTrendCates();
+  renderRisingGoods();
+  renderRisingSellers();
+  renderGoods();
+  renderSubcates();
+}
+
+function renderTrendSummary() {
+  const rg = DATA.rising_goods || [];
+  const rs = DATA.rising_sellers || [];
+  const rc = (DATA.rising_cates || []).filter(c => c.qoq != null && c.qoq > 0);
+  document.getElementById('trend-summary').innerHTML = `
+    <div class="card" style="background:#fff1f0;border-left:3px solid #FF4D4F">
+      <div style="font-size:11px;color:#666;margin-bottom:4px">起量爆品（加速度≥100%）</div>
+      <div style="font-size:24px;font-weight:600;color:#FF4D4F">${rg.length}<span style="font-size:13px;font-weight:normal;color:#666"> 个</span></div>
+    </div>
+    <div class="card" style="background:#fff7e6;border-left:3px solid #FA8C16">
+      <div style="font-size:11px;color:#666;margin-bottom:4px">飙升头客（环比正增长）</div>
+      <div style="font-size:24px;font-weight:600;color:#FA8C16">${rs.length}<span style="font-size:13px;font-weight:normal;color:#666"> 个</span></div>
+    </div>
+    <div class="card" style="background:#f6ffed;border-left:3px solid #52C41A">
+      <div style="font-size:11px;color:#666;margin-bottom:4px">增长细分类目（环比正）</div>
+      <div style="font-size:24px;font-weight:600;color:#52C41A">${rc.length}<span style="font-size:13px;font-weight:normal;color:#666"> 个</span></div>
+    </div>`;
+}
+
+function renderTrendCates() {
+  const cates = DATA.rising_cates || [];
+  if (!cates.length) {
+    document.getElementById('trend-cates').innerHTML = '<div class="empty">无子类目数据</div>';
+    return;
+  }
+  const med = ['🥇','🥈','🥉'];
+  let html = '';
+  cates.forEach((c, i) => {
+    const qoq = c.qoq;
+    const qoqCls = qoqClass(qoq);
+    const rankBadge = i<3 ? `<span style="font-size:18px">${med[i]}</span>` : `<span class="badge cool">${c.rank||(i+1)}</span>`;
+    html += `
+      <div class="t-card">
+        <div class="rank-row">
+          ${rankBadge}
+          <span class="name">${escapeHtml(c.full_name || c.name)}</span>
+        </div>
+        <div class="kpi-row">
+          <div><span class="nm">销售额</span><br><b>${escapeHtml(c.gmv_str || '-')}</b></div>
+          <div><span class="nm">环比</span><br><b class="qoq ${qoqCls}">${fmtPct(qoq*100)}</b></div>
+          <div><span class="nm">份额</span><br><b>${escapeHtml(c.ratio_str || '-')}</b></div>
+          <div><span class="nm">客单价</span><br><b>${escapeHtml(c.avg_price_str || '-')}</b></div>
+        </div>
+        <div class="kpi-row" style="border-top:1px dashed #eef0f5;padding-top:5px">
+          <div style="font-size:11px;color:#888">商品数 <b style="color:#444">${escapeHtml(c.goods_count_str || '-')}</b></div>
+          <div style="font-size:11px;color:#888">同比 <b class="qoq ${qoqClass(c.yoy)}">${escapeHtml(c.yoy_str || '-')}</b></div>
+        </div>
+        <div class="spark" data-cate="${c.cate_id}"></div>
+      </div>`;
+  });
+  document.getElementById('trend-cates').innerHTML = html;
+  // sparkline
+  cates.forEach(c => {
+    const el = document.querySelector(`.spark[data-cate="${c.cate_id}"]`);
+    if (!el || !c.trend_30d || !c.trend_30d.length) return;
+    const vals = c.trend_30d.map(t => t.g || 0);
+    echarts.init(el).setOption({
+      grid:{top:2,left:0,right:0,bottom:0},
+      xAxis:{type:'category',show:false,data:c.trend_30d.map(t=>t.d)},
+      yAxis:{type:'value',show:false},
+      tooltip:{trigger:'axis',formatter:p=>`${p[0].axisValue}<br>商品数: ${p[0].value}`},
+      series:[{type:'line',data:vals,smooth:true,showSymbol:false,
+        lineStyle:{width:1.5,color:'#722ed1'},
+        areaStyle:{color:'rgba(114,46,209,.12)'}}],
+    });
+  });
+}
+
+function renderRisingGoods() {
+  const goods = DATA.rising_goods || [];
+  document.getElementById('rising-stats').innerHTML =
+    `共 ${goods.length} 个起量商品 · 平均加速度 ${goods.length ? (goods.reduce((s,g)=>s+g.acceleration,0)/goods.length*100).toFixed(0)+'%' : '-'}`;
+  if (!goods.length) {
+    document.getElementById('rising-goods').innerHTML = '<div class="empty">无起量商品数据。可能原因：脱敏区间近 7 天数据不足，或商品趋势尚未形成。</div>';
+    return;
+  }
+  let html = '';
+  goods.forEach(g => {
+    const reasons = (g.reasons||[]).map(r => `<span class="chip" style="background:${r.color}">${escapeHtml(r.tag)}</span>`).join('');
+    const noReasons = !g.reasons || !g.reasons.length;
+    html += `
+      <div class="g-card">
+        <img src="${g.image||''}" loading="lazy" onerror="this.style.background='#f5f5f5';this.style.objectFit='contain'">
+        <div class="info">
+          <div class="title">${escapeHtml(g.title)}</div>
+          <div class="sub">${escapeHtml(g.shop||'-')} · ¥${escapeHtml(g.price||'-')} · 上架 ${escapeHtml(g.online_time||'-').slice(0,10)}</div>
+          <div class="sub">${escapeHtml(g.cate||'')}</div>
+          <div class="badges">
+            <span class="badge">加速度 ${fmtAcc(g.acceleration)}</span>
+            <span style="background:#fff7e6;color:#FA8C16;padding:1px 6px;border-radius:8px;font-weight:600">GMV ${escapeHtml(g.gmv_str||'-')}</span>
+            <span style="background:#f0f5ff;color:#1890ff;padding:1px 6px;border-radius:8px">销量 ${escapeHtml(g.sales_str||'-')}</span>
+          </div>
+          <div class="reasons">
+            ${reasons || '<span style="font-size:10px;color:#bbb">待人工标注</span>'}
+          </div>
+        </div>
+      </div>`;
+  });
+  document.getElementById('rising-goods').innerHTML = html;
+}
+
+function renderRisingSellers() {
+  const sellers = DATA.rising_sellers || [];
+  if (!sellers.length) {
+    document.getElementById('rising-sellers').innerHTML = '<div class="empty">无飙升头客</div>'; return;
+  }
+  let html = '';
+  sellers.forEach(s => {
+    const kindBadge = s.kind === '达人' ? 
+      '<span style="background:#722ed1;color:#fff;font-size:10px;padding:1px 5px;border-radius:8px">达人</span>' :
+      '<span style="background:#1890ff;color:#fff;font-size:10px;padding:1px 5px;border-radius:8px">小店</span>';
+    html += `
+      <div class="s-card">
+        <img src="${s.avatar||''}" onerror="this.style.background='#f5f5f5'">
+        <div class="info">
+          <div class="name">${escapeHtml(s.name)} ${kindBadge}</div>
+          <div class="sub">${escapeHtml(s.shop_type || s.main_cate || '')} ${s.fans_str ? '· 粉丝 '+s.fans_str : ''} · 当前排名 ${s.rank||'-'}</div>
+        </div>
+        <div class="right">
+          <div class="acc">+${escapeHtml(s.qoq_str)}%</div>
+          <div class="gmv">${escapeHtml(s.gmv_str)}</div>
+        </div>
+      </div>`;
+  });
+  document.getElementById('rising-sellers').innerHTML = html;
+}
+
+function renderGoods() {
+  const goods = DATA.rank_goods || [];
+  let html = '<table><thead><tr><th>排名</th><th>商品</th><th>店铺</th><th>GMV区间</th><th>销量区间</th><th>价格</th><th>上架</th></tr></thead><tbody>';
+  goods.slice(0, 200).forEach(g => {
+    html += `<tr>
+      <td>${g.RankNum||''}</td>
+      <td><div style="display:flex;gap:6px;align-items:center"><img src="${g.ImgUrl||''}" style="width:32px;height:32px;object-fit:cover;border-radius:3px"><span style="max-width:300px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escapeHtml(g.Title||'')}">${escapeHtml(g.Title||'')}</span></div></td>
+      <td>${escapeHtml(g.ShopName||'-')}</td>
+      <td><b>${escapeHtml(g.SalesGmvStr||'-')}</b></td>
+      <td>${escapeHtml(g.SalesCountStr||'-')}</td>
+      <td>¥${escapeHtml(g.Price||'-')}</td>
+      <td style="color:#888;font-size:11px">${escapeHtml((g.OnlineTime||'').slice(0,10))}</td>
+    </tr>`;
+  });
+  html += '</tbody></table><div style="font-size:11px;color:#888;margin-top:10px">显示前 200 条 / 共 ' + goods.length + ' 条</div>';
+  document.getElementById('goods-table').innerHTML = html;
+}
+
+function renderSubcates() {
+  const subs = DATA.subcates || [];
+  if (!subs.length) {
+    document.getElementById('subcate-table').innerHTML = '<div class="empty">无子类目</div>'; return;
+  }
+  let html = '<table><thead><tr><th>排名</th><th>类目</th><th>销售额</th><th>环比</th><th>同比</th><th>份额</th><th>客单价</th><th>商品数</th></tr></thead><tbody>';
+  subs.forEach(c => {
+    const qoq = c.qoq;
+    html += `<tr>
+      <td>${c.rank||''}</td>
+      <td><b>${escapeHtml(c.full_name||c.name)}</b></td>
+      <td>${escapeHtml(c.gmv_str||'-')}</td>
+      <td class="qoq ${qoqClass(qoq)}">${qoq!=null ? fmtPct(qoq*100) : '-'}</td>
+      <td class="qoq ${qoqClass(c.yoy)}">${escapeHtml(c.yoy_str||'-')}</td>
+      <td>${escapeHtml(c.ratio_str||'-')}</td>
+      <td>${escapeHtml(c.avg_price_str||'-')}</td>
+      <td>${escapeHtml(c.goods_count_str||'-')}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  document.getElementById('subcate-table').innerHTML = html;
+}
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('tab-'+t.dataset.tab).classList.add('active');
+    setTimeout(() => {
+      document.querySelectorAll('.tab-panel.active div').forEach(el => {
+        const i = echarts.getInstanceByDom(el);
+        if (i) i.resize();
+      });
+    }, 100);
+  });
+});
+
+load();
+</script></body></html>
