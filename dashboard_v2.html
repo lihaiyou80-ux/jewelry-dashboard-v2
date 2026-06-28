@@ -217,8 +217,9 @@
 
   <div class="card-row row-2">
     <div class="card">
-      <h3>📊 趋势最猛的细分类目 <span class="badge">按周 GMV 环比降序</span></h3>
-      <div id="rising-cates-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px"></div>
+      <h3>📊 细分类目全景 <span class="badge">按周 GMV 环比降序 · 绿正红负</span></h3>
+      <div id="rising-cates-summary" style="font-size:12px;color:#666;margin-bottom:8px"></div>
+      <div id="rising-cates-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;max-height:540px;overflow-y:auto"></div>
     </div>
     <div class="card">
       <h3>👑 GMV 飙升头客 <span class="badge">点击跳头客榜</span></h3>
@@ -1461,21 +1462,33 @@ function renderRising(){
       actions.map(a => `<div style="font-size:13px;line-height:1.9;color:#444;margin-bottom:5px">• ${a}</div>`).join('');
   }
 
-  // 2. 起量类目卡片（按周环比降序）
+  // 2. 细分类目全景（按周环比降序 - 正绿负红）
   const catesEl = document.getElementById('rising-cates-list');
+  const sumEl = document.getElementById('rising-cates-summary');
   const medals = ['🥇','🥈','🥉'];
   if(!cates.length){
-    catesEl.innerHTML = '<div style="color:#999;padding:14px;text-align:center">本周细分类目暂无正增长</div>';
+    catesEl.innerHTML = '<div style="color:#999;padding:14px;text-align:center">暂无细分类目数据</div>';
+    sumEl.textContent = '';
   } else {
+    const pos = cates.filter(c => (c.qoq || 0) > 0).length;
+    const neg = cates.filter(c => (c.qoq || 0) < 0).length;
+    const flat = cates.length - pos - neg;
+    sumEl.innerHTML = `本周共 <b>${cates.length}</b> 个细分类目：<span style="color:#52C41A">↑${pos} 正增长</span> / <span style="color:#FF4D4F">↓${neg} 负增长</span>${flat ? ' / <span style="color:#999">○'+flat+' 持平</span>' : ''}`;
     catesEl.innerHTML = cates.map((c,i)=>{
+      const qoq = c.qoq || 0;
+      const isPos = qoq > 0;
+      const isNeg = qoq < 0;
       const rankBadge = i<3 ? `<span style="font-size:18px">${medals[i]}</span>` 
                             : `<span style="background:#1F4E79;color:#fff;font-size:11px;padding:1px 7px;border-radius:9px;font-weight:600">#${i+1}</span>`;
-      const qoqPct = (c.qoq || 0) * 100;
-      return `<div style="background:#fafbfc;border:1px solid #eef0f5;border-radius:6px;padding:10px">
+      // 颜色：正绿 / 负红 / 0 灰
+      const qoqBg = isPos ? '#52C41A' : (isNeg ? '#FF4D4F' : '#999');
+      const cardBg = isPos ? 'linear-gradient(135deg,#f6ffed 0%,#fafbfc 60%)' : (isNeg ? 'linear-gradient(135deg,#fff1f0 0%,#fafbfc 60%)' : '#fafbfc');
+      const cardBorder = isPos ? '#b7eb8f' : (isNeg ? '#ffccc7' : '#eef0f5');
+      return `<div style="background:${cardBg};border:1px solid ${cardBorder};border-radius:6px;padding:10px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
           ${rankBadge}
           <span style="font-weight:600;color:#222;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${c.full_name||c.name}">${c.name}</span>
-          <span style="margin-left:auto;background:#FF4D4F;color:#fff;padding:2px 8px;border-radius:9px;font-size:12px;font-weight:600">${fmtQoQ(c.qoq)}</span>
+          <span style="margin-left:auto;background:${qoqBg};color:#fff;padding:2px 8px;border-radius:9px;font-size:12px;font-weight:600">${fmtQoQ(c.qoq)}</span>
         </div>
         <div style="display:flex;gap:12px;font-size:11px;color:#666">
           <div><span style="color:#888">GMV</span> <b style="color:#1F4E79;font-size:13px">${c.gmv_str||'-'}</b></div>
