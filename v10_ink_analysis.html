@@ -3,486 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>墨镜V10框架 - 大盘TOP100素材归类分析</title>
+    <title>素材脚本框架分类_墨镜老花镜_v10</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: #f5f5f5; color: #333; }
-        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
-        h1 { text-align: center; margin-bottom: 30px; color: #1a1a1a; font-size: 28px; }
-        
-        /* 框架卡片样式 */
-        .main-category { margin-bottom: 50px; }
-        .main-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 24px; border-radius: 16px; margin-bottom: 24px; }
-        .main-header h2 { font-size: 28px; margin-bottom: 8px; }
-        .main-header .stats { font-size: 15px; opacity: 0.9; }
-        
-        .sub-category { background: white; border-radius: 16px; margin-bottom: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden; }
-        .sub-header { background: #f8f9fa; padding: 20px; border-bottom: 2px solid #e9ecef; }
-        .sub-header h3 { font-size: 20px; color: #495057; margin-bottom: 8px; }
-        .sub-header .stats { font-size: 14px; color: #6c757d; }
-        
-        /* 卖点表格样式 */
-        .selling-point-table { width: 100%; border-collapse: collapse; }
-        .selling-point-table th { background: #667eea; color: white; padding: 14px 16px; text-align: left; font-size: 14px; font-weight: 600; }
-        .selling-point-table td { padding: 16px; border-bottom: 1px solid #eee; vertical-align: top; }
-        .selling-point-table tr:hover { background: #f8f9fa; }
-        .selling-point-table tr:last-child td { border-bottom: none; }
-        
-        .col-main { width: 10%; }
-        .col-sub { width: 12%; }
-        .col-selling { width: 18%; }
-        .col-desc { width: 25%; }
-        .col-video { width: 15%; }
-        .col-audience { width: 20%; }
-        
-        .selling-point-title { font-weight: 600; color: #1a1a1a; }
-        .description-text { color: #495057; line-height: 1.6; font-size: 14px; }
-        .video-clip { background: #e7f3ff; padding: 10px 14px; border-radius: 8px; font-size: 13px; color: #004085; }
-        .audience-tag { background: #fff3cd; padding: 8px 12px; border-radius: 8px; font-size: 13px; color: #856404; font-weight: 500; }
-        
-        .stats-badge { display: inline-block; background: #667eea; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; margin-right: 8px; }
-        
-        /* 数据统计样式 */
-        .stats-section { background: white; padding: 24px; border-radius: 16px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .stats-section h2 { font-size: 22px; margin-bottom: 20px; color: #1a1a1a; border-bottom: 3px solid #667eea; padding-bottom: 12px; }
-        .stats-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .stats-table th { background: #667eea; color: white; padding: 14px; text-align: left; font-size: 14px; }
-        .stats-table td { padding: 14px; border-bottom: 1px solid #eee; }
-        .stats-table tr:hover { background: #f8f9fa; }
-        
-        .progress-bar { height: 10px; background: #e9ecef; border-radius: 5px; overflow: hidden; margin-top: 6px; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea 0%, #764ba2 100%); border-radius: 5px; }
-        
-        .footer { text-align: center; color: #6c757d; font-size: 13px; margin-top: 40px; padding: 20px; }
+        body { font-family: "Microsoft YaHei", sans-serif; background: #fff; margin: 0; padding: 20px; }
+        table { border-collapse: collapse; width: 100%; font-size: 14px; }
+        th, td { border: 1px solid #000; padding: 8px; vertical-align: top; line-height: 1.5; }
+        th { background: #d9d9d9; font-weight: bold; text-align: center; }
+        td.center { text-align: center; font-weight: bold; }
+        td.empty { background: #f5f5f5; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>墨镜V10框架 - 大盘TOP100素材归类分析</h1>
-
-        <div class="stats-section">
-            <h2>📊 数据汇总</h2>
-            <table class="stats-table">
-                <thead>
-                    <tr>
-                        <th>主分类</th>
-                        <th>素材数</th>
-                        <th>消耗(元)</th>
-                        <th>占比</th>
-                        <th>平均CTR</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr>
-                        <td><strong>A-痛点开场</strong></td>
-                        <td>43</td>
-                        <td>16,670</td>
-                        <td>
-                            61.8%
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 61.8%"></div>
-                            </div>
-                        </td>
-                        <td>0.00%</td>
-                    </tr>
-
-                    <tr>
-                        <td><strong>B-背书开场</strong></td>
-                        <td>14</td>
-                        <td>5,483</td>
-                        <td>
-                            20.3%
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 20.3%"></div>
-                            </div>
-                        </td>
-                        <td>0.00%</td>
-                    </tr>
-
-                    <tr>
-                        <td><strong>C-功能开场</strong></td>
-                        <td>7</td>
-                        <td>3,021</td>
-                        <td>
-                            11.2%
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 11.2%"></div>
-                            </div>
-                        </td>
-                        <td>0.00%</td>
-                    </tr>
-
-                    <tr>
-                        <td><strong>D-钩子开场</strong></td>
-                        <td>1</td>
-                        <td>232</td>
-                        <td>
-                            0.9%
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 0.9%"></div>
-                            </div>
-                        </td>
-                        <td>0.00%</td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-
-        <div class="main-category">
-            <div class="main-header">
-                <h2>A-痛点开场</h2>
-                <div class="stats">
-                    素材数: 43 | 
-                    消耗: 16,670元 | 
-                    平均CTR: 0.00%
-                </div>
-            </div>
-
-            <div class="sub-category">
-                <div class="sub-header">
-                    <h3>颜值反差痛点</h3>
-                    <div class="stats">
-                        素材数: 2 | 
-                        消耗: 0元 | 
-                        占比: 0.0%
-                    </div>
-                </div>
-                <table class="selling-point-table">
-                    <thead>
-                        <tr>
-                            <th class="col-selling">卖点</th>
-                            <th class="col-desc">画面/文字描述</th>
-                            <th class="col-video">视频片段</th>
-                            <th class="col-audience">适合人群</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="selling-point-title">大黑框显老气</td>
-                            <td class="description-text">达人素颜+夸张大黑框墨镜显老丑效果+屏幕字幕'别再戴大黑框显老'</td>
-                            <td><div class="video-clip">▶ 播放 [0.0-10.5s]</div></td>
-                            <td><div class="audience-tag">精致中年女性 / 都市女白领</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">浅色墨镜自带妆容感</td>
-                            <td class="description-text">浅色墨镜精致秀气修饰眉型+像画了妆的对比切镜</td>
-                            <td><div class="video-clip">▶ 播放 [10.5-20.0s]</div></td>
-                            <td><div class="audience-tag">精致中年女性 / 都市女白领</div></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="sub-category">
-                <div class="sub-header">
-                    <h3>驾驶强光痛点</h3>
-                    <div class="stats">
-                        素材数: 27 | 
-                        消耗: 11,629元 | 
-                        占比: 0.0%
-                    </div>
-                </div>
-                <table class="selling-point-table">
-                    <thead>
-                        <tr>
-                            <th class="col-selling">卖点</th>
-                            <th class="col-desc">画面/文字描述</th>
-                            <th class="col-video">视频片段</th>
-                            <th class="col-audience">适合人群</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="selling-point-title">墨镜近隧道要摘</td>
-                            <td class="description-text">车内第一视角+隧道口进出画面+屏幕字幕'为什么变色日夜两用镜比墨镜好用'+说明痛点(近隧道要摘墨镜)</td>
-                            <td><div class="video-clip">▶ 播放 [3.0-25.0s]</div></td>
-                            <td><div class="audience-tag">商务车主 / 户外运动男</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">晚上防眩光削弱远光</td>
-                            <td class="description-text">夜间对向车灯远光被削弱+车内视角戴镜柔和+屏幕字幕'晚上防眩光运光 削弱远光'</td>
-                            <td><div class="video-clip">▶ 播放 [3.0-25.0s]</div></td>
-                            <td><div class="audience-tag">商务车主 / 户外运动男</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">白天太阳镜夜晚变色</td>
-                            <td class="description-text">车内偏光测试对比+屏幕字幕'白天太阳镜 夜晚变色镜'</td>
-                            <td><div class="video-clip">▶ 播放 [15.0-30.0s]</div></td>
-                            <td><div class="audience-tag">商务车主 / 户外运动男</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">过滤强光防远灯</td>
-                            <td class="description-text">车内驾驶+屏幕字幕'清视野过滤强光'+'防远灯效果'</td>
-                            <td><div class="video-clip">▶ 播放 [62.0-70.0s]</div></td>
-                            <td><div class="audience-tag">商务车主 / 户外运动男</div></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-
-        <div class="main-category">
-            <div class="main-header">
-                <h2>B-背书开场</h2>
-                <div class="stats">
-                    素材数: 14 | 
-                    消耗: 5,483元 | 
-                    平均CTR: 0.00%
-                </div>
-            </div>
-
-            <div class="sub-category">
-                <div class="sub-header">
-                    <h3>工厂老板娘背书</h3>
-                    <div class="stats">
-                        素材数: 2 | 
-                        消耗: 0元 | 
-                        占比: 0.0%
-                    </div>
-                </div>
-                <table class="selling-point-table">
-                    <thead>
-                        <tr>
-                            <th class="col-selling">卖点</th>
-                            <th class="col-desc">画面/文字描述</th>
-                            <th class="col-video">视频片段</th>
-                            <th class="col-audience">适合人群</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="selling-point-title">老板娘手持验货</td>
-                            <td class="description-text">老板娘手持产品盒出镜+'女生一个人开车一定要带日夜两用老化镜'+'开箱给大哥们验货吧'</td>
-                            <td><div class="video-clip">▶ 播放 [0.0-10.0s]</div></td>
-                            <td><div class="audience-tag">精致中年女性 / 银发退休群体</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">俄罗斯东西没得说</td>
-                            <td class="description-text">镜腿俄文标签特写+口播'俄罗斯的东西真的没得说啊'</td>
-                            <td><div class="video-clip">▶ 播放 [10.0-16.0s]</div></td>
-                            <td><div class="audience-tag">精致中年女性 / 银发退休群体</div></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="sub-category">
-                <div class="sub-header">
-                    <h3>达人真人背书</h3>
-                    <div class="stats">
-                        素材数: 14 | 
-                        消耗: 5,483元 | 
-                        占比: 0.0%
-                    </div>
-                </div>
-                <table class="selling-point-table">
-                    <thead>
-                        <tr>
-                            <th class="col-selling">卖点</th>
-                            <th class="col-desc">画面/文字描述</th>
-                            <th class="col-video">视频片段</th>
-                            <th class="col-audience">适合人群</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="selling-point-title">达人精挑严选背书</td>
-                            <td class="description-text">达人手持墨镜出镜+口播'质感超级好...这个眼睛是我精挑严选上来的'+浅色衣服试戴</td>
-                            <td><div class="video-clip">▶ 播放 [0.0-9.3s]</div></td>
-                            <td><div class="audience-tag">都市女白领 / 潮流少女</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">防紫外线防太阳光</td>
-                            <td class="description-text">户外阳光实测+口播'防晒呀 防紫外线啊 防太阳光啊 防塑眼睛啊'</td>
-                            <td><div class="video-clip">▶ 播放 [9.3-15.3s]</div></td>
-                            <td><div class="audience-tag">都市女白领 / 潮流少女</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">一镜三用凹造型</td>
-                            <td class="description-text">正面/侧面/背影三角度戴镜+口播'一镜三用 姐们们啊 正面侧面背影 这种紫色'</td>
-                            <td><div class="video-clip">▶ 播放 [15.3-20.0s]</div></td>
-                            <td><div class="audience-tag">都市女白领 / 潮流少女</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">达人反向种草钩子</td>
-                            <td class="description-text">达人真人出镜+口播'我总觉得墨镜鸡肋呢 原来是我根本就没买'</td>
-                            <td><div class="video-clip">▶ 播放 [0.0-3.6s]</div></td>
-                            <td><div class="audience-tag">都市女白领 / 潮流少女</div></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-
-        <div class="main-category">
-            <div class="main-header">
-                <h2>C-功能开场</h2>
-                <div class="stats">
-                    素材数: 7 | 
-                    消耗: 3,021元 | 
-                    平均CTR: 0.00%
-                </div>
-            </div>
-
-            <div class="sub-category">
-                <div class="sub-header">
-                    <h3>远近多焦点功能</h3>
-                    <div class="stats">
-                        素材数: 2 | 
-                        消耗: 0元 | 
-                        占比: 0.0%
-                    </div>
-                </div>
-                <table class="selling-point-table">
-                    <thead>
-                        <tr>
-                            <th class="col-selling">卖点</th>
-                            <th class="col-desc">画面/文字描述</th>
-                            <th class="col-video">视频片段</th>
-                            <th class="col-audience">适合人群</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="selling-point-title">传统花镜只能看近痛点</td>
-                            <td class="description-text">老人反复摘戴老花镜画面+口播'年纪大了看不清小字 戴老花眼镜来回摘带非常麻烦'</td>
-                            <td><div class="video-clip">▶ 播放 [0.0-11.4s]</div></td>
-                            <td><div class="audience-tag">银发退休群体 / 中老年群体</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">渐进多焦点看近看远看中间</td>
-                            <td class="description-text">看书看远方双场景切换+口播'又能看近又能看远 还能看中间 因为它是个渐近多焦点的镜片啊'</td>
-                            <td><div class="video-clip">▶ 播放 [11.4-21.0s]</div></td>
-                            <td><div class="audience-tag">银发退休群体 / 中老年群体</div></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-
-        <div class="main-category">
-            <div class="main-header">
-                <h2>D-钩子开场</h2>
-                <div class="stats">
-                    素材数: 1 | 
-                    消耗: 232元 | 
-                    平均CTR: 0.00%
-                </div>
-            </div>
-
-            <div class="sub-category">
-                <div class="sub-header">
-                    <h3>反常识认知颠覆</h3>
-                    <div class="stats">
-                        素材数: 2 | 
-                        消耗: 0元 | 
-                        占比: 0.0%
-                    </div>
-                </div>
-                <table class="selling-point-table">
-                    <thead>
-                        <tr>
-                            <th class="col-selling">卖点</th>
-                            <th class="col-desc">画面/文字描述</th>
-                            <th class="col-video">视频片段</th>
-                            <th class="col-audience">适合人群</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="selling-point-title">韩国有钱人不戴老花镜</td>
-                            <td class="description-text">韩国街拍+首尔画面+口播'韩国永远不会让国人知道的秘密 韩国的有钱人从来不戴老花镜'</td>
-                            <td><div class="video-clip">▶ 播放 [0.0-4.9s]</div></td>
-                            <td><div class="audience-tag">孝敬父母的子女 / 精致中年女性</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">首尔实验室老花加深警示</td>
-                            <td class="description-text">实验室场景+口播'因为在首尔有一个实验发现 长期佩戴劣质老花镜不仅会眼干眼色 还容易加深老花程度'</td>
-                            <td><div class="video-clip">▶ 播放 [4.9-11.5s]</div></td>
-                            <td><div class="audience-tag">孝敬父母的子女 / 精致中年女性</div></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="sub-category">
-                <div class="sub-header">
-                    <h3>反向价格锚定</h3>
-                    <div class="stats">
-                        素材数: 1 | 
-                        消耗: 232元 | 
-                        占比: 0.0%
-                    </div>
-                </div>
-                <table class="selling-point-table">
-                    <thead>
-                        <tr>
-                            <th class="col-selling">卖点</th>
-                            <th class="col-desc">画面/文字描述</th>
-                            <th class="col-video">视频片段</th>
-                            <th class="col-audience">适合人群</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr>
-                            <td class="selling-point-title">专柜两万多一副</td>
-                            <td class="description-text">商家手持产品+口播'跟女生出去吃饭把这幅老花镜戴在脸上 不过专柜啊它卖到了两万多块钱一副的'</td>
-                            <td><div class="video-clip">▶ 播放 [0.0-6.6s]</div></td>
-                            <td><div class="audience-tag">精致中年女性 / 孝敬父母的子女</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">便宜清仓处理一批</td>
-                            <td class="description-text">清仓库存画面+口播'刚好要便宜的处理一批 看得上的话全部都拿去戴'</td>
-                            <td><div class="video-clip">▶ 播放 [6.6-13.0s]</div></td>
-                            <td><div class="audience-tag">银发退休群体 / 中老年群体</div></td>
-                        </tr>
-
-                        <tr>
-                            <td class="selling-point-title">一镜多用当墨镜看电脑</td>
-                            <td class="description-text">多场景快切+口播'能当墨镜 并且走路开车玩手机 看电脑看电视'</td>
-                            <td><div class="video-clip">▶ 播放 [15.0-20.0s]</div></td>
-                            <td><div class="audience-tag">银发退休群体 / 中老年群体</div></td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-
-        <div class="footer">
-            <p>生成时间: 2026-07-12 15:38:22</p>
-            <p>数据来源: 大盘太阳镜 TOP100 素材 | V10 框架分类</p>
-        </div>
-    </div>
+<table>
+    <tr>
+        <th>主分类</th>
+        <th>副分类</th>
+        <th>卖点</th>
+        <th>画面/文字描述</th>
+        <th>画面截图</th>
+        <th>口播原文</th>
+        <th>视频片段</th>
+        <th>适合人群</th>
+    </tr>
+    <tr>
+        <td rowspan="6" class="center">A-痛点开场</td>
+        <td rowspan="2" class="center">颜值反差痛点</td>
+        <td>大黑框显老气</td>
+        <td>达人素颜+夸张大黑框墨镜显老丑效果+屏幕字幕&#x27;别再戴大黑框显老&#x27;</td>
+        <td></td>
+        <td>[0.0-10.5s] 想要更漂亮年轻的,你就不要戴这种大黑框框的墨镜,这个显得多老气,多丑,所以只有好看的墨镜才能把你带漂亮。</td>
+        <td>▶ 播放 [0.0-10.5s]</td>
+        <td>精致中年女性 / 都市女白领</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>浅色墨镜自带妆容感</td>
+        <td>浅色墨镜精致秀气修饰眉型+像画了妆的对比切镜</td>
+        <td></td>
+        <td>[10.5-20.0s] 你看这样的浅色墨镜真的比那种黑色漂亮太多,又精致又秀气又修饰眉型好看,而且能够像画了妆的一样。</td>
+        <td>▶ 播放 [10.5-20.0s]</td>
+        <td>精致中年女性 / 都市女白领</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td rowspan="4" class="center">驾驶强光痛点</td>
+        <td>墨镜近隧道要摘</td>
+        <td>车内第一视角+隧道口进出画面+屏幕字幕&#x27;为什么变色日夜两用镜比墨镜好用&#x27;+说明痛点(近隧道要摘墨镜)</td>
+        <td></td>
+        <td>[3.1-24.7s] 为什么变色日夜两用镜比墨镜好用,因为白天行车使用它是这样的,而墨镜只能白天使用,近隧道还需要摘墨镜。这款日夜两用镜根据此外线变色,白天遮阳防晒。晚上防眩光运光,虚弱远光,一副顶两幅,而且款式不挑人,谁带谁帅。现在直播间搞活动,近来就有优惠。</td>
+        <td>▶ 播放 [3.0-25.0s]</td>
+        <td>商务车主 / 户外运动男</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>晚上防眩光削弱远光</td>
+        <td>夜间对向车灯远光被削弱+车内视角戴镜柔和+屏幕字幕&#x27;晚上防眩光运光 削弱远光&#x27;</td>
+        <td></td>
+        <td>[3.1-24.8s] 为什么变色日夜两用镜比墨镜好用?因为白天行车使用它是这样的,而墨镜只能白天使用,近隧道还需要摘墨镜。这款日夜两用镜根据此外线变色,白天遮阳防晒,晚上防眩光运光,削弱远光,一副顶两幅,而且款式不挑人,谁带谁帅。现在直播间搞活动,近来就有优惠。</td>
+        <td>▶ 播放 [3.0-25.0s]</td>
+        <td>商务车主 / 户外运动男</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>白天太阳镜夜晚变色</td>
+        <td>车内偏光测试对比+屏幕字幕&#x27;白天太阳镜 夜晚变色镜&#x27;</td>
+        <td></td>
+        <td>【OCR画面字幕】[15s] 白天太镜  魄-靓镜 泵寞窦鱼夥 / [16s] 白天太镜 魄卫舰镜 / [17s] 白夭太阳镜 魄r莜舰镜 / [18s] 白天太镜  魄-舰镜 天净沙 / [19s] 白天太镜 魄-舰镜 / [20s] 白夭太阳镜 魄r莜舰镜 / [21s] 白夭太阳镜 魄r莜舰镜 / [22s] 白夭太阳镜 魄r莜舰镜 / [23s] 白夭太阳镜 魄r莜舰镜 / [24s] 白夭太阳镜  魄r莜舰镜 / [27s] 广牟偏光测试 sr / [28s] 「车偏光测试 shrt / [29s] 越趟才 B66邸 AMD B / [30s] 天少</td>
+        <td>▶ 播放 [15.0-30.0s]</td>
+        <td>商务车主 / 户外运动男</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>过滤强光防远灯</td>
+        <td>车内驾驶+屏幕字幕&#x27;清视野过滤强光&#x27;+&#x27;防远灯效果&#x27;</td>
+        <td></td>
+        <td>【OCR画面字幕】[62s] 青视野过滤强光 RliRTt R 刁巧f止3右&amp;定叽拜 厂5百面为 1试坍 JX / [63s] 青视野过滤Q光 / [64s] ~以箧挎{+坏阿内H 5止^8罔定6w $狈笈贝诉匆4仿 [告面雨为`P环堋。尖际5兴以戋将为准 / [65s] 防远灯效果 Cook Sant T:0鬣愎和-回哟为  耳语母止厌奁固足[褂扭 匆4伤 厂告面面为 逯环垌 .际5以2 c / [66s] 正厂直镅富品质太陶镜 R酉{寞W / [67s] 正厂直镅富品质太陶镜 A酉{寞凭 / [69s] VC反 studio</td>
+        <td>▶ 播放 [62.0-70.0s]</td>
+        <td>商务车主 / 户外运动男</td>
+    </tr>
+    <tr>
+        <td rowspan="6" class="center">B-背书开场</td>
+        <td rowspan="2" class="center">工厂老板娘背书</td>
+        <td>老板娘手持验货</td>
+        <td>老板娘手持产品盒出镜+&#x27;女生一个人开车一定要带日夜两用老化镜&#x27;+&#x27;开箱给大哥们验货吧&#x27;</td>
+        <td></td>
+        <td>[0.0-6.0s] 女生经常一个人开车的哈,一定要带一副日夜两用的老化镜,都是好东西哈。 / [6.0-10.0s] 正儿八经的好东西,开箱给大哥们验货吧。</td>
+        <td>▶ 播放 [0.0-10.0s]</td>
+        <td>精致中年女性 / 银发退休群体</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>俄罗斯东西没得说</td>
+        <td>镜腿俄文标签特写+口播&#x27;俄罗斯的东西真的没得说啊&#x27;</td>
+        <td></td>
+        <td>[10.0-15.8s] 自看人家产品的质量,都知道俄罗斯的东西真的没得说啊。</td>
+        <td>▶ 播放 [10.0-16.0s]</td>
+        <td>精致中年女性 / 银发退休群体</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td rowspan="4" class="center">达人真人背书</td>
+        <td>达人精挑严选背书</td>
+        <td>达人手持墨镜出镜+口播&#x27;质感超级好...这个眼睛是我精挑严选上来的&#x27;+浅色衣服试戴</td>
+        <td></td>
+        <td>[0.0-2.9s] 质感超级好的,和我们当时帽子一样,开得都超级便宜的。 / [2.9-4.5s] 然后你可以看一下,闹这样子。 / [4.5-9.3s] 哇,浅色衣服帮了大家好漂亮,防紫外线,而且这个眼睛是我精挑严选上来的。</td>
+        <td>▶ 播放 [0.0-9.3s]</td>
+        <td>都市女白领 / 潮流少女</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>防紫外线防太阳光</td>
+        <td>户外阳光实测+口播&#x27;防晒呀 防紫外线啊 防太阳光啊 防塑眼睛啊&#x27;</td>
+        <td></td>
+        <td>[9.3-14.1s] 防晒呀,防紫外线啊,防太阳光啊,防塑眼睛啊,平日上出门拍照啊,凹个造型啊。 / [14.1-15.3s] 哇,太漂亮了。</td>
+        <td>▶ 播放 [9.3-15.3s]</td>
+        <td>都市女白领 / 潮流少女</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>一镜三用凹造型</td>
+        <td>正面/侧面/背影三角度戴镜+口播&#x27;一镜三用 姐们们啊 正面侧面背影 这种紫色&#x27;</td>
+        <td></td>
+        <td>[15.3-20.0s] 一镜三用,一镜三用,姐们们啊,正面侧面背影,这种紫色。</td>
+        <td>▶ 播放 [15.3-20.0s]</td>
+        <td>都市女白领 / 潮流少女</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>达人反向种草钩子</td>
+        <td>达人真人出镜+口播&#x27;我总觉得墨镜鸡肋呢 原来是我根本就没买&#x27;</td>
+        <td></td>
+        <td>[0.0-3.6s] 我爱不得,我总觉得墨镜鸡肋呢,原来是我根本就没买。</td>
+        <td>▶ 播放 [0.0-3.6s]</td>
+        <td>都市女白领 / 潮流少女</td>
+    </tr>
+    <tr>
+        <td rowspan="2" class="center">C-功能开场</td>
+        <td rowspan="2" class="center">远近多焦点功能</td>
+        <td>传统花镜只能看近痛点</td>
+        <td>老人反复摘戴老花镜画面+口播&#x27;年纪大了看不清小字 戴老花眼镜来回摘带非常麻烦&#x27;</td>
+        <td></td>
+        <td>[0.0-11.4s] 年纪大了看不清小字,戴老花眼镜来回栽带非常麻烦,给大家推荐一款渐近多焦点能看远的老花镜,走路开车24小时全年带,度日合适,久待不累,久待不晕。</td>
+        <td>▶ 播放 [0.0-11.4s]</td>
+        <td>银发退休群体 / 中老年群体</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>渐进多焦点看近看远看中间</td>
+        <td>看书看远方双场景切换+口播&#x27;又能看近又能看远 还能看中间 因为它是个渐近多焦点的镜片啊&#x27;</td>
+        <td></td>
+        <td>[11.5-15.6s] 这个眼镜好好在哪呢?它告别了传统的花镜,只能看近不能看远。 / [15.7-21.0s] 这个眼镜又能看近又能看远,还能看中间,因为它是个渐近多焦点的镜片啊。</td>
+        <td>▶ 播放 [11.4-21.0s]</td>
+        <td>银发退休群体 / 中老年群体</td>
+    </tr>
+    <tr>
+        <td rowspan="5" class="center">D-钩子开场</td>
+        <td rowspan="2" class="center">反常识认知颠覆</td>
+        <td>韩国有钱人不戴老花镜</td>
+        <td>韩国街拍+首尔画面+口播&#x27;韩国永远不会让国人知道的秘密 韩国的有钱人从来不戴老花镜&#x27;</td>
+        <td></td>
+        <td>[0.0-2.5s] 在韩国永远不会让国人知道的秘密, / [2.5-4.9s] 韩国的有钱人从来不戴老花镜,</td>
+        <td>▶ 播放 [0.0-4.9s]</td>
+        <td>孝敬父母的子女 / 精致中年女性</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>首尔实验室老花加深警示</td>
+        <td>实验室场景+口播&#x27;因为在首尔有一个实验发现 长期佩戴劣质老花镜不仅会眼干眼色 还容易加深老花程度&#x27;</td>
+        <td></td>
+        <td>[4.9-6.8s] 因为在首尔有一个实验发现, / [6.8-9.8s] 长期佩戴劣质老花镜不仅会眼干眼色, / [9.8-11.5s] 还容易加深老花程度。</td>
+        <td>▶ 播放 [4.9-11.5s]</td>
+        <td>孝敬父母的子女 / 精致中年女性</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td rowspan="3" class="center">反向价格锚定</td>
+        <td>专柜两万多一副</td>
+        <td>商家手持产品+口播&#x27;跟女生出去吃饭把这幅老花镜戴在脸上 不过专柜啊它卖到了两万多块钱一副的&#x27;</td>
+        <td></td>
+        <td>[0.0-3.6s] 跟女生出去吃饭,你把这幅老花镜戴在脸上, / [3.6-6.6s] 不过专柜啊,它卖到了两万多块钱一副的。</td>
+        <td>▶ 播放 [0.0-6.6s]</td>
+        <td>精致中年女性 / 孝敬父母的子女</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>便宜清仓处理一批</td>
+        <td>清仓库存画面+口播&#x27;刚好要便宜的处理一批 看得上的话全部都拿去戴&#x27;</td>
+        <td></td>
+        <td>[6.6-10.7s] 如果说你们没有戴过呢,我这边呢,刚好要便宜的处理一批。 / [10.7-12.7s] 看得上的话,全部都拿去戴。</td>
+        <td>▶ 播放 [6.6-13.0s]</td>
+        <td>银发退休群体 / 中老年群体</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td>一镜多用当墨镜看电脑</td>
+        <td>多场景快切+口播&#x27;能当墨镜 并且走路开车玩手机 看电脑看电视&#x27;</td>
+        <td></td>
+        <td>[15.1-19.9s] 你有见过这种能当墨镜,并且走路开车玩手机,看电脑看电视。</td>
+        <td>▶ 播放 [15.0-20.0s]</td>
+        <td>银发退休群体 / 中老年群体</td>
+    </tr>
+</table>
 </body>
 </html>
